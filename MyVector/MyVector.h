@@ -6,7 +6,13 @@ template <typename T>
 class MyVector{
     //Friend functions
     //comparison operator
-    
+    //无论规模的大小,vector是对两者对应下标元素的比较
+    friend bool operator< (const MyVector<T> &lhs, const MyVector<T> &rhs){
+       for(size_t i = 0; i != lhs.size() && i != rhs.size(); ++i)
+          if(lhs._elem[i] < rhs._elem[i])
+            return true;
+       return false;
+    }
 public:
     //default constructor,容量为c,规模为s,所有元素初始为v
     MyVector(int c = DEFAULT_CAPACITY, int s = 0, T v = 0) {
