@@ -6,7 +6,6 @@ template <typename T>
 class MyVector{
     //Friend functions
     //comparison operator
-    //无论规模的大小,vector是两者对应下标元素的比较
     friend bool operator< (const MyVector<T> &lhs, const MyVector<T> &rhs);
     friend bool operator==(const MyVector<T> &lhs, const MyVector<T> &rhs);
     friend bool operator!=(const MyVector<T> &lhs, const MyVector<T> &rhs);
