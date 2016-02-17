@@ -1,18 +1,19 @@
 #ifndef MYVECTOR_H_
 #define MYVECTOR_H_
 //向量模板类
-#define DEFAULT_CAPACITY 3 //默认的初始容量
+#define DEFAULT_CAPACITY 3 //默认初始容量
 template <typename T>
 class MyVector{
     //Friend functions
     //comparison operator
-    //无论规模的大小,vector是对两者对应下标元素的比较
-    friend bool operator< (const MyVector<T> &lhs, const MyVector<T> &rhs){
-       for(size_t i = 0; i != lhs.size() && i != rhs.size(); ++i)
-          if(lhs._elem[i] < rhs._elem[i])
-            return true;
-       return false;
-    }
+    //无论规模的大小,vector是两者对应下标元素的比较
+    friend bool operator< (const MyVector<T> &lhs, const MyVector<T> &rhs);
+    friend bool operator==(const MyVector<T> &lhs, const MyVector<T> &rhs);
+    friend bool operator!=(const MyVector<T> &lhs, const MyVector<T> &rhs);
+    friend bool operator> (const MyVector<T> &lhs, const MyVector<T> &rhs);
+    friend bool operator<=(const MyVector<T> &lhs, const MyVector<T> &rhs);
+    friend bool operator>=(const MyVector<T> &lhs, const MyVector<T> &rhs);
+    
 public:
     //default constructor,容量为c,规模为s,所有元素初始为v
     MyVector(int c = DEFAULT_CAPACITY, int s = 0, T v = 0) {
@@ -21,7 +22,7 @@ public:
     }
     
     //constructor,将向量初始化为n个0
-    
+    MyVector(int n): _size(n), _capacity;
     //constructor,将向量初始化为n个k
     
     //constructor,将向量初始化为k
@@ -72,11 +73,11 @@ public:
    
 protected:
     //复制数组区间A[lo,hi)
-    
+    void copyFrom(T *A, int , int );
     //空间不足时扩容
-    
+    void expand();
     //缩容
-    
+    void shrink();
     //无序区间查找
     
     //有序区间查找
