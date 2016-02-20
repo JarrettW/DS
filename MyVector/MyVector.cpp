@@ -51,7 +51,7 @@ bool operator<= (const MyVector<T> &lhs, const MyVector<T> &rhs){
 template <typename T>
 void MyVector<T>::copyFrom(int * A, int lo, int hi){
     //分配空间,两倍规模的容量
-    _elem = new T[2*(hi-lo)];
+    _elem = new T[(hi-lo) << 1];
     //规模清零
     _size = 0;
     //逐元素复制
@@ -95,8 +95,29 @@ void MyVector<T>::shrink(){
 //将向量初始化为n个0
 template <typename T>
 MyVector<T>::MyVector(int n){
-    _elem = new T[_capacity = n >> 2];
-    _size = n;
-    for(size_t i = 0; i != _size; ++i)
-        _elem[i] = 0;
+    _elem = new T[_capacity = n << 1];
+    _size = 0;
+    while(_size != n)
+        _elem[_size++] = 0; //当循环最后退出时_size仍递增了一个数,由于是后置++操作符,所以并没有赋值,而更新为实际规模
+}
+
+//向量初始化为n个e
+template <typename T>
+MyVector<T>::MyVector(int n, T e){
+    _elem = new T[_capacity = n << 1];
+    _size = 0;
+    while(_size != n)
+        _elem[_size++] = e;
+}
+
+template <typename T>
+MyVector<T>::MyVector(T e){
+    _size++;
+    _elem[0] = e;
+    _capacity = DEFAULT_CAPACITY;
+}
+
+template <typename T>
+MyVector<T>::MyVector(std::initialization_list<T> li){
+        
 }

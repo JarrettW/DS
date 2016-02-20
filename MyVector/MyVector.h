@@ -21,13 +21,13 @@ public:
     }
     
     //constructor,将向量初始化为n个0
-    MyVector(int n): _size(n), _capacity;
-    //constructor,将向量初始化为n个k
-    
-    //constructor,将向量初始化为k
-    
-    //initialization_list
-    
+    MyVector(int n);
+    //constructor,将向量初始化为n个e
+    MyVector(int n, T e);
+    //constructor,将向量初始化为1个e
+    MyVector(T e);
+    //initialization_list,列表初始化
+    MyVector(std::initialization_list<T> li);
     //destructor
     
     //copy constructor
