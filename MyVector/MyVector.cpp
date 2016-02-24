@@ -154,3 +154,7 @@ MyVector<T>& MyVector<T>::operator=(MyVector<T> &&mv)noexcept{
     _capacity = mv.capacity();
     copyForm(std::move(mv._elem), 0, std::move(mv.size()));
 }
+//将元素e插入秩r,原后继元素依次后移
+int MyVector<T>::insert(int r, const T &e){
+    
+}

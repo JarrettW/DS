@@ -50,9 +50,11 @@ public:
         return _elem[n];
     }
     //获取秩为r的元素
-    
-    //insert, 默认作为末元素插入
-    
+    T& get(int r){
+        return _elem[r];
+    }
+    //insert, 默认作为末元素插入,返回元素插入位置
+    int insert(const T &e);
     //find, 无序查找(基于区间查找)
     
     //sort, 统一排序接口, 随机选择排序方法(整体排序)
@@ -91,7 +93,7 @@ protected:
     //区间排序
     
     //insert, 将元素e插入秩r,原后继元素依次后移
-    
+    int insert(int r, const T &e);
     //删除秩在区间[lo,hi)之内的元素
     
     //对[lo, hi)区间置乱
