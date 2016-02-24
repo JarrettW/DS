@@ -12,7 +12,6 @@ class MyVector{
     friend bool operator> (const MyVector<T> &lhs, const MyVector<T> &rhs);
     friend bool operator<=(const MyVector<T> &lhs, const MyVector<T> &rhs);
     friend bool operator>=(const MyVector<T> &lhs, const MyVector<T> &rhs);
-    
 public:
     //default constructor,容量为c,规模为s,所有元素初始为v
     MyVector(int c = DEFAULT_CAPACITY, int s = 0, T v = 0) {
@@ -29,21 +28,27 @@ public:
     //initialization_list,列表初始化
     MyVector(std::initialization_list<T> li);
     //destructor
-    
+    ~MyVector();
     //copy constructor
-    
+    MyVector(const MyVector<T> &mv);
     //assignment operator
-    
+    MyVector<T>& operator=(const MyVector<T> &mv);
     //move constructor
-    
+    MyVector<T>(MyVector<T> &&mv)noexcept;
     //move assignment operator
-    
+    MyVector<T>& operator=(MyVector<T> &&mv)noexcept;
     //size
-    
+    inline unsigned size(){
+        return _size;
+    }
     //empty
-    
+    inline bool empty(){
+        return _size == 0;
+    }
     //重载下标运算符
-    
+    T& operator[](int n){
+        return _elem[n];
+    }
     //获取秩为r的元素
     
     //insert, 默认作为末元素插入
@@ -56,6 +61,8 @@ public:
     
     //remove, 删除秩为r的元素(基于区间删除)
     
+    //删除所有元素clear
+	void clear();
     //判断向量是否已排序
     
     //重载下标操作符,通过下标访问元素
