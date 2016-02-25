@@ -156,5 +156,75 @@ MyVector<T>& MyVector<T>::operator=(MyVector<T> &&mv)noexcept{
 }
 //将元素e插入秩r,原后继元素依次后移
 int MyVector<T>::insert(int r, const T &e){
-    
+    if(_size == 0){
+        _size++;
+        _elem = new _elem[DEFAULT_CAPACITY];
+        _elem[0] = e;
+        _capacity = DEFAULT_CAPACITY;
+        return _size;
+    }
+    //检查是否需要扩容
+    expand();
+    int i = _size;
+    while(i-- != r){
+        _elem[i] = _elem[i-1];
+    }
+    _elem[r] = e;
+    ++_size;
+    return r;
 }
+//默认作为末元素插入,返回元素插入位置
+int MyVector<T>::insert(const T &e){
+    insert(_size, e);
+}
+//无序区间查找
+int MyVector<T>::find(int lo, int hi, const T &e){
+    //自后向前依次查找
+    while(lo < hi--){
+        if(_elem[hi] == e)
+            return hi;
+    }
+    //至此肯定未查找到给定元素
+    return -1;
+}
+//无序整体查找
+int MyVector<T>::find(const T &e){
+    return find(0, _size, e);
+}
+//sort, 整体排序
+void MyVector<T>::sort(){
+    //调用保护成员方法
+    sort(0, _size);
+}
+//区间排序,统一排序接口,随机选择排序方法
+void MyVector<T>::sort(int lo, int hi){
+    switch(rand() % 5){
+        case 1:bubbleSort(lo, hi); break;
+        case 2:insertSort(lo, hi); break;
+        case 3:selectionSort(lo, hi); break;
+        case 4:mergeSort(lo, hi); break;
+        default: quickSort(lo, hi); break;
+    }
+}
+//bubbleSort
+void MyVector<T>::bubbleSort(int lo, int hi){
+    //排序区间
+    int n = hi - lo;
+    //排序标记,初始化假设未排序
+    bool flag = false;
+    //外层循环,整体扫描
+    while(!flag){
+        //假设已排序
+        flag = true;
+        //内层循环,单趟扫描交换
+        for(auto i = 1; i != n; ++i){
+            if(_elem[i] < _elem[i-1])
+                swap(_elem[i], _elem[i-1]);
+             //排序未完成
+             flag = false;
+        }
+        --n;
+    }
+}
+//insertSort,插入排序
+void 

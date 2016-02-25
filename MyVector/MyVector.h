@@ -56,9 +56,9 @@ public:
     //insert, 默认作为末元素插入,返回元素插入位置
     int insert(const T &e);
     //find, 无序查找(基于区间查找)
-    
+    int find(const T &e);
     //sort, 统一排序接口, 随机选择排序方法(整体排序)
-    
+    void sort();
     //search, 有序查找(基于区间查找)
     
     //remove, 删除秩为r的元素(基于区间删除)
@@ -66,9 +66,7 @@ public:
     //删除所有元素clear
 	void clear();
     //判断向量是否已排序
-    
-    //重载下标操作符,通过下标访问元素
-    
+
     //整体置乱器
     
     //无序去重
@@ -86,11 +84,15 @@ protected:
     void expand();
     //缩容
     void shrink();
+    //数值交换
+    void swap(T &a, T &b){
+        T temp = a;
+        a = b;
+        b = temp;
+    }
     //无序区间查找
-    
+    int find(int lo, int hi, const T &e);
     //有序区间查找
-    
-    //区间排序
     
     //insert, 将元素e插入秩r,原后继元素依次后移
     int insert(int r, const T &e);
@@ -100,18 +102,20 @@ protected:
     
     //max.选取最大元素
     
-    //bubble sort
-    
-    //insert sort
-    
-    //selection sort
-    
-    //merge sort
-    
     //partition, 轴点构造算法
-    
+    //int partition(int lo, int hi);
+    //区间排序,统一排序接口,随机选择排序方法
+    void sort(int lo, int hi);
+    //bubble sort
+    void bubbleSort(int lo, int hi);
+    //insert sort,有序前缀,无序后缀
+    void insertSort(int lo, int hi);
+    //selection sort//无序前缀,有序后缀
+    void selectionSort(int lo, int hi);
+    //merge sort
+    void mergeSort(int lo, int hi);
     //quick sort,快排
-    
+    void quickSort(int lo, int hi);
 private:
   T *_elem;
   unsigned _size;
