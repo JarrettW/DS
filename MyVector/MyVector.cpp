@@ -205,7 +205,7 @@ void MyVector<T>::sort(int lo, int hi){
         case 4:mergeSort(lo, hi); break;
         default: quickSort(lo, hi); break;
     }
-}
+}  
 //bubbleSort
 void MyVector<T>::bubbleSort(int lo, int hi){
     //排序区间
