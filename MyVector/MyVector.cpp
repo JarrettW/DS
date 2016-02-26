@@ -227,4 +227,6 @@ void MyVector<T>::bubbleSort(int lo, int hi){
     }
 }
 //insertSort,插入排序
-void 
+void MyVector<T>::insertSort(int lo, int hi){
+    
+}
