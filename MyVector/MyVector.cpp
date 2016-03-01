@@ -5,6 +5,9 @@ bool operator< (const MyVector<T> &lhs, const MyVector<T> &rhs){
         //对两个vector相同下标元素的比较
         if(lhs._elem[i] < rhs._elem[i])
             return true;
+        //若后者大于前者,直接返回假
+        if(lhs.elem[i] > rhs.elem[i])
+            return false;
     }
     //基于以上比较,元素均相等.仍存在两种可能.若前者规模小于后者,则
     if(lhs.size() < rhs.size())
@@ -45,7 +48,7 @@ bool operator<= (const MyVector<T> &lhs, const MyVector<T> &rhs){
 template <typename T>
 void MyVector<T>::copyFrom(int * A, int lo, int hi){
     //分配空间,两倍规模的容量
-    _elem = new T[(hi-lo) << 1];
+    _elem = new T[_capacity = (hi-lo) << 1];
     //规模清零
     _size = 0;
     //逐元素复制
@@ -103,6 +106,7 @@ MyVector<T>::MyVector(int n, T e){
 //constructor,将向量初始化为1个e
 template <typename T>
 MyVector<T>::MyVector(T e){
+    _size = 0;
     _elem[_size++] = e;
     _capacity = DEFAULT_CAPACITY;
 }
