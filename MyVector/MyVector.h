@@ -18,33 +18,30 @@ public:
         _elem = new T[_capacity = c];
         for(_size = 0; _size < s; _elem[_size++] = v);
     }
-    
     //constructor,将向量初始化为n个0
     MyVector(int n);
     //constructor,将向量初始化为n个e
-    MyVector(int n, T e);
+    MyVector(int n, const T e);
     //constructor,将向量初始化为1个e
     MyVector(T e);
     //initialization_list,列表初始化
     MyVector(std::initialization_list<T> li);
     //destructor
-    ~MyVector();
+    ~MyVector(){
+        delete[] _elem; //释放内部空间
+    }
     //copy constructor
     MyVector(const MyVector<T> &mv);
     //assignment operator
     MyVector<T>& operator=(const MyVector<T> &mv);
     //move constructor
-    MyVector<T>(MyVector<T> &&mv)noexcept;
+    MyVector(MyVector<T> &&mv)noexcept;
     //move assignment operator
     MyVector<T>& operator=(MyVector<T> &&mv)noexcept;
     //size
-    inline unsigned size(){
-        return _size;
-    }
-    //empty
-    inline bool empty(){
-        return _size == 0;
-    }
+    unsigned size()const { return _size; }
+    //judge empty
+    bool empty()const { return _size == 0; }
     //重载下标运算符
     T& operator[](int n){
         return _elem[n];
@@ -55,28 +52,35 @@ public:
     }
     //insert, 默认作为末元素插入,返回元素插入位置
     int insert(const T &e);
-    //find, 无序查找(基于区间查找)
-    int find(const T &e);
+    //find, 无序查找(基于区间查找),返回其秩,失败返回-1
+    int find(const T &e){
+        return find(0, _size, e);
+    }
     //sort, 统一排序接口, 随机选择排序方法(整体排序)
     void sort();
     //search, 有序查找(基于区间查找)
-    
+    int search(const T &e){
+        return search(_elem, 0, _size, e);
+    }
     //remove, 删除秩为r的元素(基于区间删除)
-    
+    T remove(int r);
     //删除所有元素clear
 	void clear();
     //判断向量是否已排序
-
+    int disordered()const;
     //整体置乱器
-    
+    void unsort(){
+        sort(0, _size);
+    }
     //无序去重
-    
+    int deduplocate();
     //有序去重
-    
+    int uniquify();
     //遍历(使用函数指针,只读或局部性修改)
-    
+    void traverse(void (* ) (T& ) );
     //遍历(使用函数对象, 可全局性修改)
-   
+    template <typename VST>
+    void traverse(VST &);
 protected:
     //复制数组区间A[lo,hi)
     void copyFrom(T *A, int , int );
@@ -93,15 +97,15 @@ protected:
     //无序区间查找
     int find(int lo, int hi, const T &e);
     //有序区间查找
-    
+    int search(T *A, int lo, int hi, const T &e);
     //insert, 将元素e插入秩r,原后继元素依次后移
     int insert(int r, const T &e);
-    //删除秩在区间[lo,hi)之内的元素
-    
+    //删除秩在区间[lo,hi)之内的元素,返回删除元素的个数
+    int remove(int lo, int hi);
     //对[lo, hi)区间置乱
-    
-    //max.选取最大元素
-    
+    void unsort(int lo, int hi);
+    //max.选取最大元素,返回其秩
+    int max(int lo, int hi);
     //partition, 轴点构造算法
     //int partition(int lo, int hi);
     //区间排序,统一排序接口,随机选择排序方法
@@ -114,6 +118,7 @@ protected:
     void selectionSort(int lo, int hi);
     //merge sort
     void mergeSort(int lo, int hi);
+    void merge(int lo, int mi, int hi);
     //quick sort,快排
     void quickSort(int lo, int hi);
 private:

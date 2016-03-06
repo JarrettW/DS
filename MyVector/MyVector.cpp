@@ -120,13 +120,7 @@ MyVector<T>::MyVector(std::initialization_list<T> li){
         _elem[_size++] = *begin++;
     }
 }
-//destructor
-template <typename T>
-MyVector<T>::~MyVector(){
-    delete []_elem;
-    //_size = 0;
-    //_capacity = DEFAULT_CAPACITY;
-}
+
 //copy constructor
 template <typename T>
 MyVector<T>::MyVector(const MyVector<T> &mv){
@@ -191,10 +185,6 @@ int MyVector<T>::find(int lo, int hi, const T &e){
     //至此肯定未查找到给定元素
     return -1;
 }
-//无序整体查找
-int MyVector<T>::find(const T &e){
-    return find(0, _size, e);
-}
 //sort, 整体排序
 void MyVector<T>::sort(){
     //调用保护成员方法
@@ -230,7 +220,38 @@ void MyVector<T>::bubbleSort(int lo, int hi){
         --n;
     }
 }
-//insertSort,插入排序
-void MyVector<T>::insertSort(int lo, int hi){
-    
+//返回最大值的秩
+template <typename T>
+void MyVector<T>::(int lo, int hi){
+    int mx = hi;
+    while(lo < hi--)
+        if(_elem[hi] > _elem[mx])
+            mx = hi;
+    return mx;
+}
+//selection sort
+template <typename T>
+void MyVector<T>::selectionSort(int lo, int hi){
+    while(lo < --hi){
+        swap(_elem[hi], _elem[max(lo, hi)]);
+    }
+}
+//merge sort
+template <typename T>
+void MyVector<T>::mergeSort(int lo, int hi){
+    if(hi-lo < 2) return;
+    int mi = (hi + lo) >> 1;
+    mergeSort(lo, mi);
+    mergeSort(mi, hi);
+    merge(lo, mi, hi);
+}
+//有序区间查找
+template <typename T>
+int MyVector<T>::search(int *A, int lo, int hi, const T &e){
+    //二分查找实现
+    while(lo < hi){
+        int mi = (hi + lo) >> 1;
+        (e < A[mi]) ? hi = mi : lo = mi + 1;
+    }
+    return --lo;
 }
