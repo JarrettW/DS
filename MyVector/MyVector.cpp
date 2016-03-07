@@ -1,4 +1,5 @@
 #include "MyVector.h"
+//重载比较操作符
 template <typename T>
 bool operator< (const MyVector<T> &lhs, const MyVector<T> &rhs){
     for(size_t i = 0; i != lhs.size() && i != rhs.size(); ++i){
@@ -45,6 +46,7 @@ template <typename T>
 bool operator<= (const MyVector<T> &lhs, const MyVector<T> &rhs){
     return !(lhs > rhs);
 }
+//数组整体复制
 template <typename T>
 void MyVector<T>::copyFrom(int * A, int lo, int hi){
     //分配空间,两倍规模的容量
@@ -55,6 +57,7 @@ void MyVector<T>::copyFrom(int * A, int lo, int hi){
     while(lo < hi)
         _elem[_size++] = A[lo++];
 }
+//扩容
 template <typename T>
 void MyVector<T>::expand(){
     //1.重新配置,2.元素移动,3.原空间释放
@@ -71,6 +74,7 @@ void MyVector<T>::expand(){
         _elem[i] = oldElem[i];
     delete[] oldElem;
 }
+//缩容
 template <typename T>
 void MyVector<T>::shrink(){
     //不致缩容到原始容量以下
@@ -175,6 +179,19 @@ int MyVector<T>::insert(int r, const T &e){
 int MyVector<T>::insert(const T &e){
     insert(_size, e);
 }
+//删除秩在区间[lo,hi)之内的元素, 返回删除元素的个数
+template <typename T>
+int MyVector<T>::remove(int lo, int hi){
+    //退化情况
+    if(lo == hi)
+        return 0;
+    while( hi != _size){  //确保hi不大于规模
+        _elem[lo++] = _elem[hi++];
+    }
+    _size = lo;
+    shrink();
+    return hi - lo;
+}
 //无序区间查找
 int MyVector<T>::find(int lo, int hi, const T &e){
     //自后向前依次查找
@@ -192,11 +209,10 @@ void MyVector<T>::sort(){
 }
 //区间排序,统一排序接口,随机选择排序方法
 void MyVector<T>::sort(int lo, int hi){
-    switch(rand() % 5){
+    switch(rand() % 4){
         case 1:bubbleSort(lo, hi); break;
-        case 2:insertSort(lo, hi); break;
-        case 3:selectionSort(lo, hi); break;
-        case 4:mergeSort(lo, hi); break;
+        case 2:selectionSort(lo, hi); break;
+        case 3:mergeSort(lo, hi); break;
         default: quickSort(lo, hi); break;
     }
 }  
@@ -222,7 +238,7 @@ void MyVector<T>::bubbleSort(int lo, int hi){
 }
 //返回最大值的秩
 template <typename T>
-void MyVector<T>::(int lo, int hi){
+void MyVector<T>::max(int lo, int hi){
     int mx = hi;
     while(lo < hi--)
         if(_elem[hi] > _elem[mx])
@@ -245,13 +261,98 @@ void MyVector<T>::mergeSort(int lo, int hi){
     mergeSort(mi, hi);
     merge(lo, mi, hi);
 }
+template <typename T>
+void MyVector<T>::merge(int lo, int mi, int hi){
+    T *A = _elem + lo; //合并后的向量A[0, hi-lo] = _elem[lo, hi]
+	int lb = mi-lo; T *B = new T[lb];//前子向量B[0,lb]=_elem[lo,mi]
+	for(int i = 0; i<lb; B[i] = A[i++]); //复制前子向量
+	
+	int lc = hi-mi; T *C = _elem+mi; //后子向量C[0,lc]=_elem[mi,hi)
+	for(int i=0, j=0, k=0; (j<lb) || (k<lc); ){//B[j]和C[k]中的小者续至末尾
+		if( (j<lb) && (! (k<lc) || (B[j] <= C[k] )))
+			A[i++] = B[j++];
+		if( (k<lc) && (! (j<lb) || (C[k] < B[j] )))
+			A[i++] = C[k++];
+	}
+	delete[] B;
+}//归并后得到完整的有序向量[lo,hi);
+//快排
+template <typename T>
+void MyVector<T>::quickSort(int lo, int hi){
+    //单元素自然有序
+    if(hi - lo < 2) return;
+    //构造轴点
+    int mi = partition(lo, hi);
+    //递归对前子向量排序
+    quickSort(lo, mi);
+    //递归对后子向量排序
+    quickSort(mi + 1, hi);
+}
+//轴点构造
+template <typename T>
+int MyVector<T>::partition(int lo, int hi){
+    //任选一元素并与首元素交换
+    swap(_elem[lo], _elem[ lo + rand() % (hi-lo+1) ]);
+    T pivot = _elem[lo]; //以随机选取的首元素为轴点
+    //从向量的两端交替的向中间扫描
+    while(lo < hi){
+        while(lo < hi)
+            if(pivot < _elem[hi]) //在大于轴点的情况下
+                hi--;  //向左拓展
+            else{  //一旦小于等于轴点
+                _elem[lo++] = _elem[hi]; //将其归入左端子向量
+                break; 
+            }
+        while(lo < hi)
+            if(_elem[lo] < pivot) //在小于轴点的情况下
+                lo++; //向右拓展
+            else{  //一旦大于等于轴点
+                _elem[hi--] = _elem[lo]; //将其归入右端子向量
+                break;
+            }
+    }
+    _elem[lo] = pivot; //将备份的轴点放在前后子向量之间
+    return lo; //返回轴点的秩
+}
 //有序区间查找
 template <typename T>
-int MyVector<T>::search(int *A, int lo, int hi, const T &e){
-    //二分查找实现
+int MyVector<T>::search(int lo, int hi, const T &e){
+    return binSearch(_elem, lo, hi, e);
+}
+//二分查找
+template <typename T>
+int MyVector<T>::binSearch(int *A, int lo, int hi, const T&e){
     while(lo < hi){
         int mi = (hi + lo) >> 1;
-        (e < A[mi]) ? hi = mi : lo = mi + 1;
+        (e > A[mi]) ? hi = mi : lo = mi + 1;
     }
     return --lo;
+}
+//整体置乱
+template <typename T>
+void MyVector<T>::permute(MyVector<T> &V){
+    for(auto i = V.size(); i != 0; i--) //自后向前
+        swap(V[i - 1], V[rand() % i]); //将V[i-1]与V[0,i]中某一随机元素交换
+}
+//区间置乱
+template <typename T>
+void MyVector<T>::unsort(int lo, int hi){
+    T *V = _elem + lo; //将子向量_elem[lo, hi]视作另一向量V[0, hi-lo]
+    for(auto i = V.size(); i != 0; i--) //自后向前
+        swap(V[i - 1], V[rand() % i]); //随机交换元素
+}
+//判断向量是否已排序,返回重复元素的个数
+template <typename T>
+int MyVector<T>::disordered() const{
+    int count = 0;
+    for(auto i = 1; i != _size; ++i){
+        if(_elem[i] < _elem[i - 1])
+            ++count;
+    }
+    return count;
+}
+//无序去重,返回重复元素的个数
+template <typename T>
+int MyVector<T>::deduplocate(){
+    
 }
