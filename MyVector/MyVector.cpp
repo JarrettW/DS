@@ -354,5 +354,33 @@ int MyVector<T>::disordered() const{
 //无序去重,返回重复元素的个数
 template <typename T>
 int MyVector<T>::deduplocate(){
-    
+    int oldSize = _size;
+    int i = 1;
+    while(i < _size)
+        (find(_elem[i], 0, i) < 0) ? i++ : remove(i);
+    return oldSize - _size;
+}
+//有序去重,返回重复元素的个数
+template <typename T>
+int MyVector<T>::uniquify(){
+    int i = 0, j = 0;
+    while(++j < _size)
+        if(_elem[i] != _elem[j])
+            _elem[++i] = _elem[j];
+    _size = ++i;
+    shrink();
+    return j - i;
+}
+//遍历(使用函数指针,只读或局部性修改)
+template <typename T>
+void traverse(void (* ) (T & visit)){
+   for(auto i = 0; i != _size; ++i)
+        visit(_elem[i]);
+}
+//遍历(使用函数对象,可全局性修改)
+template <typename T>
+template <typename VST>
+void MyVector<T>::traverse(VST &visit){
+    for(auto i = 0; i != _size; ++i)
+        visit(_elem[i]);
 }
