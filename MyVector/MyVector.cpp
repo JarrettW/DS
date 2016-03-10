@@ -1,9 +1,10 @@
 #include "MyVector.h"
+#include <initializer_list>
 //重载比较操作符
 template <typename T>
 bool operator< (const MyVector<T> &lhs, const MyVector<T> &rhs){
     for(size_t i = 0; i != lhs.size() && i != rhs.size(); ++i){
-        //对两个vector相同下标元素的比较
+        //对两个MyVector相同下标元素的比较
         if(lhs._elem[i] < rhs._elem[i])
             return true;
         //若后者大于前者,直接返回假
@@ -18,7 +19,7 @@ bool operator< (const MyVector<T> &lhs, const MyVector<T> &rhs){
 }
 // 不考虑规模、元素相等,但下标位置不同的情况,否则需将两者分别排序,再对比。
 template <typename T>
-bool operator==(const Vec<T>& lhs, const Vec<T>& rhs){
+bool operator==(const MyVector<T>& lhs, const MyVector<T>& rhs){
 	bool flag = false;
     //条件1.规模相等
 	if(lhs.size() == rhs.size()){
@@ -31,7 +32,7 @@ bool operator==(const Vec<T>& lhs, const Vec<T>& rhs){
 	return flag;
 }
 template <typename T>
-bool operator!=(const Vec<T>& lhs, const Vec<T>& rhs){
+bool operator!=(const MyVector<T>& lhs, const MyVector<T>& rhs){
 	return !(lhs == rhs);
 }
 template <typename T>
@@ -48,7 +49,7 @@ bool operator<= (const MyVector<T> &lhs, const MyVector<T> &rhs){
 }
 //数组整体复制
 template <typename T>
-void MyVector<T>::copyFrom(int * A, int lo, int hi){
+void MyVector<T>::copyFrom(T * A, int lo, int hi){
     //分配空间,两倍规模的容量
     _elem = new T[_capacity = (hi-lo) << 1];
     //规模清零
@@ -107,16 +108,9 @@ MyVector<T>::MyVector(int n, T e){
     while(_size != n)
         _elem[_size++] = e;
 }
-//constructor,将向量初始化为1个e
-template <typename T>
-MyVector<T>::MyVector(T e){
-    _size = 0;
-    _elem[_size++] = e;
-    _capacity = DEFAULT_CAPACITY;
-}
 //initialization_list,列表初始化
 template <typename T>
-MyVector<T>::MyVector(std::initialization_list<T> li){
+MyVector<T>::MyVector(std::initializer_list<T> li){
     _size = 0;
     auto begin = li.begin(), end = li.end();
     _elem = new T[_capacity = li.size() << 1];
@@ -156,6 +150,7 @@ MyVector<T>& MyVector<T>::operator=(MyVector<T> &&mv)noexcept{
     _capacity = mv.capacity();
     copyForm(std::move(mv._elem), 0, std::move(mv.size()));
 }
+template <typename T>
 //将元素e插入秩r,原后继元素依次后移
 int MyVector<T>::insert(int r, const T &e){
     if(_size == 0){
@@ -175,6 +170,7 @@ int MyVector<T>::insert(int r, const T &e){
     ++_size;
     return r;
 }
+template <typename T>
 //默认作为末元素插入,返回元素插入位置
 int MyVector<T>::insert(const T &e){
     insert(_size, e);
@@ -192,8 +188,9 @@ int MyVector<T>::remove(int lo, int hi){
     shrink();
     return hi - lo;
 }
+template <typename T>
 //无序区间查找
-int MyVector<T>::find(int lo, int hi, const T &e){
+int MyVector<T>::find(int lo, int hi, const T &e)const{
     //自后向前依次查找
     while(lo < hi--){
         if(_elem[hi] == e)
@@ -202,11 +199,13 @@ int MyVector<T>::find(int lo, int hi, const T &e){
     //至此肯定未查找到给定元素
     return -1;
 }
+template <typename T>
 //sort, 整体排序
 void MyVector<T>::sort(){
     //调用保护成员方法
     sort(0, _size);
 }
+template <typename T>
 //区间排序,统一排序接口,随机选择排序方法
 void MyVector<T>::sort(int lo, int hi){
     switch(rand() % 4){
@@ -216,6 +215,7 @@ void MyVector<T>::sort(int lo, int hi){
         default: quickSort(lo, hi); break;
     }
 }  
+template <typename T>
 //bubbleSort
 void MyVector<T>::bubbleSort(int lo, int hi){
     //排序区间
@@ -238,7 +238,7 @@ void MyVector<T>::bubbleSort(int lo, int hi){
 }
 //返回最大值的秩
 template <typename T>
-void MyVector<T>::max(int lo, int hi){
+int MyVector<T>::max(int lo, int hi){
     int mx = hi;
     while(lo < hi--)
         if(_elem[hi] > _elem[mx])
@@ -316,12 +316,12 @@ int MyVector<T>::partition(int lo, int hi){
 }
 //有序区间查找
 template <typename T>
-int MyVector<T>::search(int lo, int hi, const T &e){
+int MyVector<T>::search(int lo, int hi, const T &e)const{
     return binSearch(_elem, lo, hi, e);
 }
 //二分查找
 template <typename T>
-int MyVector<T>::binSearch(int *A, int lo, int hi, const T&e){
+int MyVector<T>::binSearch(int *A, int lo, int hi, const T &e)const{
     while(lo < hi){
         int mi = (hi + lo) >> 1;
         (e > A[mi]) ? hi = mi : lo = mi + 1;

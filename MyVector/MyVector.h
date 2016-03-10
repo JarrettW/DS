@@ -6,11 +6,17 @@ template <typename T>
 class MyVector{
     //Friend functions
     //comparison operator
+    template <typename T>
     friend bool operator< (const MyVector<T> &lhs, const MyVector<T> &rhs);
+    template <typename T>
     friend bool operator==(const MyVector<T> &lhs, const MyVector<T> &rhs);
+    template <typename T>
     friend bool operator!=(const MyVector<T> &lhs, const MyVector<T> &rhs);
+    template <typename T>
     friend bool operator> (const MyVector<T> &lhs, const MyVector<T> &rhs);
+    template <typename T>
     friend bool operator<=(const MyVector<T> &lhs, const MyVector<T> &rhs);
+    template <typename T>
     friend bool operator>=(const MyVector<T> &lhs, const MyVector<T> &rhs);
 public:
     //default constructor,容量为c,规模为s,所有元素初始为v
@@ -22,10 +28,8 @@ public:
     MyVector(int n);
     //constructor,将向量初始化为n个e
     MyVector(int n, const T e);
-    //constructor,将向量初始化为1个e
-    MyVector(T e);
     //initialization_list,列表初始化
-    MyVector(std::initialization_list<T> li);
+    MyVector(std::initializer_list<T> li);
     //destructor
     ~MyVector(){
         delete[] _elem; //释放内部空间
