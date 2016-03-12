@@ -7,7 +7,7 @@ class MyVector{
     //Friend functions
     //comparison operator
     template <typename T>
-    friend bool operator< (const MyVector<T> &lhs, const MyVector<T> &rhs);
+    friend bool operator< (const MyVector<T> &lhs, const MyVector<T> &rhs);  
     template <typename T>
     friend bool operator==(const MyVector<T> &lhs, const MyVector<T> &rhs);
     template <typename T>
