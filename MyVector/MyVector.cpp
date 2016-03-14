@@ -61,7 +61,6 @@ void MyVector<T>::copyFrom(T * A, int lo, int hi){
 //扩容
 template <typename T>
 void MyVector<T>::expand(){
-    std::cout << "\nexpand\n";
     //1.重新配置,2.元素移动,3.原空间释放
     //未满员时,不必扩容
     if(_size < _capacity)
@@ -79,7 +78,6 @@ void MyVector<T>::expand(){
 //缩容
 template <typename T>
 void MyVector<T>::shrink(){
-    std::cout << "\nshrink\n";
     //不致缩容到原始容量以下
     if(_capacity < DEFAULT_CAPACITY >> 1)
         return;
@@ -326,7 +324,7 @@ template <typename T>
 int MyVector<T>::binSearch(int *A, int lo, int hi, const T &e)const{
     while(lo < hi){
         int mi = (hi + lo) >> 1;
-        (e > A[mi]) ? hi = mi : lo = mi + 1;
+        (e < A[mi]) ? hi = mi : lo = mi + 1;
     }
     return --lo;
 }
