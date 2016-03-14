@@ -8,7 +8,7 @@ bool operator< (const MyVector<T> &lhs, const MyVector<T> &rhs){
         if(lhs._elem[i] < rhs._elem[i])
             return true;
         //若后者大于前者,直接返回假
-        if(lhs.elem[i] > rhs.elem[i])
+        if(lhs._elem[i] > rhs._elem[i])
             return false;
     }
     //基于以上比较,元素均相等.仍存在两种可能.若前者规模小于后者,则
@@ -61,6 +61,7 @@ void MyVector<T>::copyFrom(T * A, int lo, int hi){
 //扩容
 template <typename T>
 void MyVector<T>::expand(){
+    std::cout << "\nexpand\n";
     //1.重新配置,2.元素移动,3.原空间释放
     //未满员时,不必扩容
     if(_size < _capacity)
@@ -78,6 +79,7 @@ void MyVector<T>::expand(){
 //缩容
 template <typename T>
 void MyVector<T>::shrink(){
+    std::cout << "\nshrink\n";
     //不致缩容到原始容量以下
     if(_capacity < DEFAULT_CAPACITY >> 1)
         return;
@@ -138,7 +140,7 @@ MyVector<T>& MyVector<T>::operator=(const MyVector<T> &mv){
 //move constructor
 template <typename T>
 MyVector<T>::MyVector(MyVector<T> &&mv)noexcept{
-    copyForm(std::move(mv._elem), 0, std::move(mv.size())); 
+    copyFrom(std::move(mv._elem), 0, std::move(mv.size())); 
 }
 //move assignment operator
 template <typename T>
@@ -155,7 +157,7 @@ template <typename T>
 int MyVector<T>::insert(int r, const T &e){
     if(_size == 0){
         _size++;
-        _elem = new _elem[DEFAULT_CAPACITY];
+        _elem = new T[DEFAULT_CAPACITY];
         _elem[0] = e;
         _capacity = DEFAULT_CAPACITY;
         return _size;
@@ -173,7 +175,7 @@ int MyVector<T>::insert(int r, const T &e){
 template <typename T>
 //默认作为末元素插入,返回元素插入位置
 int MyVector<T>::insert(const T &e){
-    insert(_size, e);
+    return insert(_size, e);
 }
 //删除秩在区间[lo,hi)之内的元素, 返回删除元素的个数
 template <typename T>

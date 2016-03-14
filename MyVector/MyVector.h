@@ -19,11 +19,8 @@ class MyVector{
     template <typename T>
     friend bool operator>=(const MyVector<T> &lhs, const MyVector<T> &rhs);
 public:
-    //default constructor,容量为c,规模为s,所有元素初始为v
-    MyVector(int c = DEFAULT_CAPACITY, int s = 0, T v = 0) {
-        _elem = new T[_capacity = c];
-        for(_size = 0; _size < s; _elem[_size++] = v);
-    }
+    //default constructor
+    MyVector():_size(0), _capacity(DEFAULT_CAPACITY), _elem(NULL){}
     //constructor,将向量初始化为n个0
     MyVector(int n);
     //constructor,将向量初始化为n个e
@@ -44,6 +41,8 @@ public:
     MyVector<T>& operator=(MyVector<T> &&mv)noexcept;
     //size
     unsigned size()const { return _size; }
+    //capacity
+    unsigned capacity()const { return _capacity; }
     //judge empty
     bool empty()const { return _size == 0; }
     //重载下标运算符
