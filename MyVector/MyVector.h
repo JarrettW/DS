@@ -82,12 +82,13 @@ public:
     //对[lo, hi)区间置乱
     void unsort(int lo, int hi);
     //无序去重,返回重复元素的个数
-    int deduplocate();
+    int deduplicate();
     //有序去重
     int uniquify();
     //遍历(使用函数指针,只读或局部性修改)
-    void traverse(void (* ) (T& ) );
+    void traverse(void (*visit) (T&)); //参数:visit指向一个函数,该函数的参数是一个T类型的引用,返回值是void类型
     //遍历(使用函数对象, 可全局性修改)
+    //函数对象
     template <typename VST>
     void traverse(VST &);
 protected:

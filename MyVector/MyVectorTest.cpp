@@ -1,6 +1,15 @@
 #include <iostream>
 #include "MyVector.cpp"
 #include <ctime>
+//函数指针
+int Fun(int &e);
+//函数对象
+template <typename T>
+struct visit{
+  void operator()(T &e){
+      std::cout << e << " ";
+  }  
+};
 
 int main(){
     MyVector<int> DefaultConstructor; //默认构造函数
@@ -15,6 +24,7 @@ int main(){
     V5.insert(211);
     MyVector<int> V6(std::move(V1));  //移动构造函数
     MyVector<int> V7 = std::move(V2); //移动赋值运算符
+    MyVector<int> V8( {3, 6, 3, 4, 7, 7, 11, 15, 11, 7} );
     
     //比较操作
     std::cout << (V1 < V2) << std::endl;
@@ -59,7 +69,7 @@ int main(){
        std::cout << V5[i] << " ";
 
     //返回向量中逆序相邻元素对的总数,即判断向量是否已经排序,返回0为有序
-    std::cout << "\nThe number of rempeating elements: " << V5.disordered() << std::endl;
+    std::cout << "\nbackward sequence: " << V5.disordered() << std::endl;
     //对V3区间置乱
     V3.unsort(V3.size() - 5, V3.size());
     for(auto i = 0; i != V3.size(); ++i)
@@ -69,11 +79,39 @@ int main(){
     V3.permute(V3);
     for(auto i = 0; i != V3.size(); ++i)
        std::cout << V3[i] << " ";
-        
-    //到这里!!!
+    std::cout << std::endl;
     
+    std::cout << "V8: \n";
+    for(auto i = 0; i != V8.size(); ++i)
+        std::cout << V8[i] << " ";
+    //无序去重,返回重复元素的个数
+    std::cout << "\nThe number of repeating elements: " << V8.deduplicate() << std::endl;
+    std::cout << "V8: \n";
+    for(auto i = 0; i != V8.size(); ++i)
+        std::cout << V8[i] << " ";
+    std::cout << std::endl;
+    V5.sort();
+    for(auto i = 0; i != V5.size(); ++i)
+        std::cout << V5[i] << " ";
+    //有序去重
+    std::cout << "\nThe number of repeating elements : " << V5.uniquify();
+    std::cout << std::endl;
+    for(auto i = 0; i != V5.size(); ++i)
+        std::cout << V5[i] << " ";
     
-	std::cout << std::endl;
+    // std::cout << V3.traverse(Fun);
+    
+    std::cout << std::endl;
+    //函数对象
+    MyVector<int> V9( {1, 2, 3, 4, 5, 6, 7});
+    V9.traverse(visit<int> () );
+     
+   	std::cout << std::endl;
     std::cout << "Time consuming: " << clock();
+    
 	return 0;
+}
+
+int Fun(int &e){
+    return e;
 }
