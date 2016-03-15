@@ -75,7 +75,7 @@ public:
 	void clear(){
         remove(0, _size);
     }
-    //判断向量是否已排序,返回重复元素的个数
+    //返回向量中逆序相邻元素对的总数,即判断向量是否已经排序,返回0为有序
     int disordered()const;
     //整体置乱器
     void permute(MyVector<T> &V);

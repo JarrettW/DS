@@ -57,15 +57,22 @@ int main(){
     std::cout << "V5: \n";
     for(auto i = 0; i != V5.size(); ++i)
        std::cout << V5[i] << " ";
-       
+
+    //返回向量中逆序相邻元素对的总数,即判断向量是否已经排序,返回0为有序
+    std::cout << "\nThe number of rempeating elements: " << V5.disordered() << std::endl;
+    //对V3区间置乱
+    V3.unsort(V3.size() - 5, V3.size());
+    for(auto i = 0; i != V3.size(); ++i)
+       std::cout << V3[i] << " ";
+    std::cout << std::endl;
+    //对V3整体置乱
+    V3.permute(V3);
+    for(auto i = 0; i != V3.size(); ++i)
+       std::cout << V3[i] << " ";
+        
     //到这里!!!
     
-    //判断向量是否已排序,返回重复元素的个数
-    std::cout << "\nThe number of rempeating elements: " << V5.disordered() << std::endl;
     
-    for(auto i = 0; i != V5.size(); ++i)
-       std::cout << V5[i] << " ";
-        
 	std::cout << std::endl;
     std::cout << "Time consuming: " << clock();
 	return 0;

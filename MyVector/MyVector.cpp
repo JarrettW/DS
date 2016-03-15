@@ -338,15 +338,15 @@ void MyVector<T>::permute(MyVector<T> &V){
 template <typename T>
 void MyVector<T>::unsort(int lo, int hi){
     T *V = _elem + lo; //将子向量_elem[lo, hi]视作另一向量V[0, hi-lo]
-    for(auto i = V.size(); i != 0; i--) //自后向前
+    for(auto i = hi-lo; i != 0; i--) //自后向前
         swap(V[i - 1], V[rand() % i]); //随机交换元素
 }
 //判断向量是否已排序,返回重复元素的个数
 template <typename T>
 int MyVector<T>::disordered() const{
-    int count = 0;
+    int count = 0; //计数器
     for(auto i = 1; i != _size; ++i){
-        if(_elem[i] < _elem[i - 1])
+        if(_elem[i] < _elem[i - 1]) //如果后一个元素小于前一个元素
             ++count;
     }
     return count;
