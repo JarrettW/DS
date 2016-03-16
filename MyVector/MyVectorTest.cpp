@@ -1,14 +1,18 @@
 #include <iostream>
 #include "MyVector.cpp"
 #include <ctime>
+#include <string>
 //函数指针
-int Fun(int &e);
+// template <typename T>
+void Fun(int &e){
+    std::cout << e << " ";
+}
 //函数对象
 template <typename T>
-struct visit{
+struct Visit{
   void operator()(T &e){
       std::cout << e << " ";
-  }  
+  }
 };
 
 int main(){
@@ -99,19 +103,19 @@ int main(){
     for(auto i = 0; i != V5.size(); ++i)
         std::cout << V5[i] << " ";
     
-    // std::cout << V3.traverse(Fun);
+    std::cout << std::endl;
+    //函数指针
+    MyVector<int> V10;
+    for(auto i =10; i != 0; --i)
+        V10.insert(i);
+    V10.traverse(Fun);
     
     std::cout << std::endl;
     //函数对象
-    MyVector<int> V9( {1, 2, 3, 4, 5, 6, 7});
-    V9.traverse(visit<int> () );
+    MyVector<std::string> V9( {"This", "is", "programing", "test!"});
+    V9.traverse( Visit<std::string> () );
      
    	std::cout << std::endl;
     std::cout << "Time consuming: " << clock();
-    
 	return 0;
-}
-
-int Fun(int &e){
-    return e;
 }
