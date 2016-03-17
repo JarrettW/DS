@@ -97,18 +97,18 @@ public:
 	T selecMax()const;   
 	//有序去重
 	int uniquify();   
-	//有序区间查找
+	//有序区间查找, 自后向前查找
 	ListNodePosi(T) search(const T &e, ListNodePosi(T) p, int n)const;  
-	//有序整体查找
+	//有序整体查找, 自后向前查找
 	ListNodePosi(T) search(const T &e)const;   
 	//删除位置p的元素,返回被删除的元素
-	T remove(ListNodePosi(T));     
+	T remove(ListNodePosi(T));
 	//归并排序---对从p开始连续的n个节点归并排序
 	void mergeSort(ListNodePosi(T) p, int n);  //这个函数未实现排序,可能是前半段或后半段的问题
 	//全列表归并,即对两个已排序的列表进行归并
 	void merge(MyList<T> &L){
 		merge(first(), _size, L, L.first(), L.size());
-	}    
+	}
 	//列表区间排序
 	void sort(ListNodePosi(T), int n);   
 	//列表整体排序
@@ -117,7 +117,7 @@ public:
 	void reverse();   
 	//遍历
 	//函数指针
-	void traverse(void(*) (T&));   //未验证
+	void traverse(void(*) (T&));
 	//函数对象
 	template <typename VST>
 	void traverse(VST &);    
@@ -127,10 +127,12 @@ protected:
 	void copyNode(ListNodePosi(T) p, int n);  //拷贝区间节点   
 	//内部排序接口
 	void merge(ListNodePosi(T), int n, MyList<T> & L, ListNodePosi(T), int m);
-	void selectionSort(ListNodePosi(T), int);   
-	void insertionSort(ListNodePosi(T), int);   
-	ListNodePosi(T) selecMaxPosi(ListNodePosi(T), int n);    //节点版本,返回最大值的节点
-	bool lt(T, T); //less than 第一个参数小于第二个参数   
+    //节点版本,返回最大值的节点
+	ListNodePosi(T) selecMaxPosi(ListNodePosi(T), int n);  
+    //选择排序
+	void selectionSort(ListNodePosi(T), int);
+    //插入排序  
+	void insertionSort(ListNodePosi(T), int);
 private:
 	ListNodePosi(T) header;
 	ListNodePosi(T) trailer;

@@ -141,13 +141,135 @@ T MyList<T>::seleMax()const{
 //有序去重
 template <typename T>
 int MyList<T>::uniquify(){
-    if(_size < 2) return 0;
+    if(_szie < 2) return 0;
     int oldSize = _size;
     ListNodePosi(T) p = header;
     ListNodePosi(T) q = header;
-    while( (p = p->succ) && (q = p->succ) && (trailer ! = p)){
+    while( (p = p->succ) && (q = p->succ) && (trailer != p)){
         if(p->data == q->data)
             remove(q);
     }
     return oldSize - _size;
+}
+//有序区间查找,自后向前查找
+ListNodePosi(T) MyList<T>::search(const T &e, ListNodePosi(T) p, int n)const{
+    while(0 <= n--){
+        if( (p = p->pred)->data) <= e)
+            break;
+    }
+    return p; //因为是有序的,所以自后向前返回的应该是等于e或不大于e的最大元素
+}
+//有序整体查找,自后向前查找
+template <typename T>
+ListNodePosi(T) MyList<T>::search(const T &e)const{
+    return search(e, last(), _size);
+}
+//删除位置p的元素,返回被删除的元素
+template <typename T>
+T MyList<T>::remove(ListNodePosi(T) p){
+    T oldElem = p->data;
+    p->pred->succ = p->succ;
+    p->succ->pred = p->pred;   //经过两步链接,将p隔离,并
+    delete p;   //删除
+    _size--;
+    return oldElem;
+}
+//protected,归并排序,二路归并算法(输入为两个已排序的列表,对它们归并)
+template <typename T>
+void MyList<T>::merge(ListNodePosi(T) p, int n, MyList<T> &L, ListNodePosi(T) q, int m){
+    ListNodePosi(T) pp = p->pred;
+    while(0 < m)
+        if( (0 < n) && (p->data <= q->data)){
+            if(q == (p = p->succ))
+                break;
+            n--;
+        }else{
+            insertB(p, L.remove(( q = q->succ)->pred));
+            m--;
+        }
+    p = pp->succ;
+}
+//public, 归并排序
+template <typename T>
+void MyList<T>::mergeSort(ListNodePosi(T) p, int n){
+    if(n < 2) return;
+    int m = n >> 1;
+    ListNodePosi(T) q = p;
+    for(int i = 0; i < m; i++)
+        q = q->succ;  //q为后半段
+    mergeSort(p, m);
+    mergeSort(q, n-m);
+    merge(p, m, *this, q, n-m); //二路归并
+}
+//选择排序, 前缀无序,后缀有序
+template <typename T>
+void MyList<T>::selectionSort(ListNodePosi(T) p, int n){
+    ListNodePosi(T) head = p->pred;
+    ListNodePosi(T) trail = p;
+    //定位到最后的节点位置
+    for(auto i = 0; i != n; ++i)
+        trail = trail->succ;
+    while(1 < n){
+        ListNodePosi(T) max = selecMaxPosi(p, n);
+        if(trail->pred != max)
+            insertB(trail, remove(max));
+        trail = trail->pred;
+        n--;
+    }
+}
+//返回最大值的节点
+template <typename T>
+ListNodePosi(T) MyList<T>::selecMaxPosi(ListNodePosi(T) p, int n){
+    ListNodePosi(T) max = p;
+    //自前向后
+    while(0 < n--){
+        if((p = p->succ)->data >= max->data)
+            max = p;
+    }
+    return max;
+}
+//插入排序,前缀有序,后缀无序
+template <typename T>
+void MyList<T>::insertionSort(ListNodePosi(T) p, int n){
+    for(auto r = 0; r < n; r++){
+        //搜索不大于p->data的节点,将p->data插入其前驱
+        insertA( search(p->data, p, r), p->data);
+        p = p->succ;
+        remove(p->pred);
+    }
+}
+//列表区间排序
+template <typename T>
+void MyList<T>::sort(ListNodePosi(T) p, int n){
+    switch(rand() %3){
+        case 1: mergeSort(p, n); break;
+        case 2: selectionSort(p, n); break;
+        default: insertionSort(p, n); break;
+    }
+}
+//列表整体排序
+template <typename T>
+void MyList<T>::sort(){
+    sort(first(), _size);
+}
+//整体倒置
+template <typename T>
+void MyList<T>::reverse(){
+    ListNodePosi(T) p = header;
+    ListNodePosi(T) q = trailer;
+    for(auto i = 0; i != _size; i += 2)//从首末节点开始,由内而外捉对的
+        std::swap( (p = p->succ)->data, (q = q->pred)->data) ;//交换对称节点的数据项, 指针节点并不需要改变,指示交换T类型数据
+}
+//遍历,函数指针
+template <typename T>
+void MyList<T>::traverse(void (*visit) (T &e)){
+    for(auto p = first(); p != trailer; p = p->succ)
+        visit(p->data);
+}
+//函数对象
+template <typename T>
+template <typename VST>
+void MyList<T>::traverse(VST & visit){
+    for(auto p = first(); p != trailer; p = p->succ)
+        visit(p->data);
 }
