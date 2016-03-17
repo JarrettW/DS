@@ -34,14 +34,13 @@ struct ListNode{
 template <typename T>
 class MyList{
 public:
-	int clear();//返回删除元素的总数
 	MyList(){
         init();
     }
 	//列表初始化
 	MyList(std::initializer_list<T>);  
 	//拷贝构造函数
-	MyList(const MyList<T>&);  
+	MyList(const MyList<T>&);
 
 	//复制列表中自位置p起的n项
 	MyList(ListNodePosi(T), int);   
@@ -52,15 +51,23 @@ public:
         delete trailer;
     }
 	//显示数据
-	T show(ListNodePosi(T) p){ 
-		if( p == NULL)
-			return 0;
-		return p->data;
+	void show(ListNodePosi(T) p){ 
+		if( p == NULL){
+			std::cout << "\nNull data\n";
+            return;
+        }
+		while(p != trailer){
+            std::cout << p->data << " ";
+            p = p->succ;
+        }
+        std::cout << std::endl;
 	}
 	//返回规模
 	int size() { return _size;}   
 	//判空
-	bool empty() { return !_size; }   
+	bool empty() { return !_size; }
+    //清空列表, 返回删除元素的总数 
+    int clear();
 	//下标重载---支持循秩访问(效率低)
 	T& operator[](int r)const;   
 	//首节点位置
@@ -137,5 +144,6 @@ private:
 	ListNodePosi(T) header;
 	ListNodePosi(T) trailer;
 	int _size;
+    //还没重载比较操作符
 };
 #endif

@@ -135,7 +135,7 @@ T MyList<T>::selecMax(ListNodePosi(T) p, int n)const{
 }
 //列表整体最大者
 template <typename T>
-T MyList<T>::seleMax()const{
+T MyList<T>::selecMax()const{
     return selecMax(first(), _size);
 }
 //有序去重
@@ -152,9 +152,10 @@ int MyList<T>::uniquify(){
     return oldSize - _size;
 }
 //有序区间查找,自后向前查找
+template <typename T>
 ListNodePosi(T) MyList<T>::search(const T &e, ListNodePosi(T) p, int n)const{
     while(0 <= n--){
-        if( (p = p->pred)->data) <= e)
+        if( (p = p->pred)->data <= e)
             break;
     }
     return p; //因为是有序的,所以自后向前返回的应该是等于e或不大于e的最大元素
@@ -262,14 +263,14 @@ void MyList<T>::reverse(){
 }
 //遍历,函数指针
 template <typename T>
-void MyList<T>::traverse(void (*visit) (T &e)){
-    for(auto p = first(); p != trailer; p = p->succ)
-        visit(p->data);
+void MyList<T>::traverse(void (*visit) (T &)){
+	for(ListNodePosi(T) p = header->succ; p != trailer; p=p->succ)
+		visit(p->data);
 }
 //函数对象
 template <typename T>
 template <typename VST>
-void MyList<T>::traverse(VST & visit){
-    for(auto p = first(); p != trailer; p = p->succ)
-        visit(p->data);
+void MyList<T>::traverse(VST& visit){
+	for(auto p = header->succ; p != trailer; p=p->succ)
+		visit(p->data);
 }
