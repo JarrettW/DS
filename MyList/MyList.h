@@ -29,8 +29,10 @@ struct ListNode{
 		succ = x;  //再将当前节点的后继改为x,就构成了紧靠当前节点之后是x,再之后就是以前的节点后继,x插在了中间
 		return x;
 	}
+    //重载输出操作符,友元函数,配合*解引用操作符输出
+    template <typename T>
+    friend std::ostream& operator<<(std::ostream &os, const ListNode<T> &);
 };
-
 template <typename T>
 class MyList{
 public:
@@ -69,10 +71,6 @@ public:
     int clear();
 	//下标重载---支持循秩访问(效率低)
 	T& operator[](int r)const;
-    //解引用
-    T& operator*(ListNodePosi(T) p){
-        return p->data;
-    }
 	//首节点位置
 	ListNodePosi(T) first()const { return header->succ; }   
 	//尾节点位置
@@ -95,7 +93,7 @@ public:
 	ListNodePosi(T) insertA(ListNodePosi(T) p, const T &e);   
 	//把e当做p的前驱插入
 	ListNodePosi(T) insertB(ListNodePosi(T) p, const T &e);   
-	//无序去重           方法待验证
+	//无序去重
 	int deduplicate();
 	//无序区间查找,找到返回节点,未找到返回NULL,默认从后向前查
 	ListNodePosi(T) find(const T &e, ListNodePosi(T) p, int n)const;

@@ -30,11 +30,23 @@ int main(){
     //S4首元素与末元素
     std::cout << "\nS4 first element: " << S4.firstElem() << " --- S4 last element: " << S4.lastElem() << std::endl;
     
-    //重载<<
+    //重载 << 操作符
     std::cout << "S4 data: " << S4 << std::endl;
     
-    //到解引用
-
+    //判断列表是否排序,返回未排序的个数
+    std::cout << "disorder: " << S4.disorder() << std::endl;
+    
+    //把e当做首节点插入
+    S4.insertAsFirst("Hello!");
+    //把e当做末节点插入
+    S4.insertAsLast("Yes~");
+    //把e当做p的后继插入
+    S4.insertA(S4.first(), "insert-succ");
+    //把e当做p的前驱插入
+    S4.insertB(S4.last(), "insert-succ");
+    S4.show(S4.first());
+    
+    
     std::cout << "\ntime consuming: " << clock();
     return 0;
 }

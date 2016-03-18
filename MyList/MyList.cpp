@@ -1,15 +1,5 @@
 #include "MyList.h"
 #include <initializer_list>
-//重载输出操作符,友元函数
-template <typename T>
-std::ostream& operator<<(std::ostream & os, const MyList<T> &obj){
-    ListNodePosi(T) p = obj.first();
-    while(p != obj.last()->succ){
-            os << p->data << " ";
-            p = p->succ;
-        }
-    return os;
-}
 template <typename T>
 //返回删除元素的总数
 int MyList<T>::clear(){
@@ -74,7 +64,7 @@ template <typename T>
 int MyList<T>::disorder()const{
     int count = 0;
     ListNodePosi(T) p = first();
-    while(p){
+    while(p != trailer){
         if(p->succ->data < p->data)
             ++count;
         p = p->succ;
@@ -281,4 +271,21 @@ template <typename VST>
 void MyList<T>::traverse(VST& visit){
 	for(auto p = header->succ; p != trailer; p=p->succ)
 		visit(p->data);
+}
+//MyList重载输出操作符,友元函数
+template <typename T>
+std::ostream& operator<<(std::ostream & os, const MyList<T> &obj){
+    ListNodePosi(T) p = obj.first();
+    while(p != obj.last()->succ){
+            os << p->data << " ";
+            p = p->succ;
+        }
+    return os;
+}
+//ListNode重载输出操作符,友元函数,为配合*解引用操作符输出
+template <typename T>
+std::ostream& operator<<(std::ostream & os, const ListNode<T> &p){
+    const ListNodePosi(T) q = &p; //传地址,转换为指针
+    os << q->data;  //取值并输出
+    return os;
 }
