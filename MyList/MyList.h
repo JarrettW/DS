@@ -11,7 +11,7 @@ struct ListNode{
 	//后继
 	ListNodePosi(T) succ;
 	//默认构造函数
-	ListNode(){}   
+	ListNode(){}
 	//构造函数
 	ListNode(T e, ListNodePosi(T) p = NULL, ListNodePosi(T) s = NULL):data(e), pred(p), succ(s){}
 	//在紧靠当前节点之前插入元素e, 返回插入后的节点
@@ -41,7 +41,6 @@ public:
 	MyList(std::initializer_list<T>);  
 	//拷贝构造函数
 	MyList(const MyList<T>&);
-
 	//复制列表中自位置p起的n项
 	MyList(ListNodePosi(T), int);   
 	//析构函数
@@ -63,13 +62,17 @@ public:
         std::cout << std::endl;
 	}
 	//返回规模
-	int size() { return _size;}   
+	int size()const { return _size;}   
 	//判空
-	bool empty() { return !_size; }
+	bool empty()const { return !_size; }
     //清空列表, 返回删除元素的总数 
     int clear();
 	//下标重载---支持循秩访问(效率低)
-	T& operator[](int r)const;   
+	T& operator[](int r)const;
+    //解引用
+    T& operator*(ListNodePosi(T) p){
+        return p->data;
+    }
 	//首节点位置
 	ListNodePosi(T) first()const { return header->succ; }   
 	//尾节点位置
@@ -85,7 +88,7 @@ public:
 	//判断列表是否排序,返回未排序的个数
 	int disorder()const;   
 	//把e当做首节点插入,返回插入的节点
-	ListNodePosi(T) insertAsFirst(const T &e);    
+	ListNodePosi(T) insertAsFirst(const T &e);
 	//把e当做末节点插入
 	ListNodePosi(T) insertAsLast(const T &e);   
 	//把e当做p的后继插入
@@ -93,7 +96,7 @@ public:
 	//把e当做p的前驱插入
 	ListNodePosi(T) insertB(ListNodePosi(T) p, const T &e);   
 	//无序去重           方法待验证
-	int deduplicate();    
+	int deduplicate();
 	//无序区间查找,找到返回节点,未找到返回NULL,默认从后向前查
 	ListNodePosi(T) find(const T &e, ListNodePosi(T) p, int n)const;
 	//无序整体查找
@@ -128,7 +131,9 @@ public:
 	//函数对象
 	template <typename VST>
 	void traverse(VST &);    
-	
+	//重载输出操作符
+    template <typename T>
+    friend std::ostream& operator<<(std::ostream &os, const MyList<T> &obj);
 protected:
 	void init(); //初始化节点函数    
 	void copyNode(ListNodePosi(T) p, int n);  //拷贝区间节点   

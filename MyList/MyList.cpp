@@ -1,5 +1,15 @@
 #include "MyList.h"
 #include <initializer_list>
+//重载输出操作符,友元函数
+template <typename T>
+std::ostream& operator<<(std::ostream & os, const MyList<T> &obj){
+    ListNodePosi(T) p = obj.first();
+    while(p != obj.last()->succ){
+            os << p->data << " ";
+            p = p->succ;
+        }
+    return os;
+}
 template <typename T>
 //返回删除元素的总数
 int MyList<T>::clear(){
@@ -25,7 +35,7 @@ template <typename T>
 void MyList<T>::copyNode(ListNodePosi(T) p, int n){
     init();
     while(n--){
-        insertAsLast(p->data);
+        insertAsLast(p->data); //把e当作末节点插入
         p = p->succ;
     }
 }
@@ -42,9 +52,7 @@ MyList<T>::MyList(std::initializer_list<T> li){
 }
 //拷贝构造函数
 template <typename T>
-MyList<T>::MyList(const MyList<T> &ml){
-    //如果列表本身不为空呢?应该需要clear()
-    //clear();
+MyList<T>::MyList(const MyList<T>& ml){
     copyNode(ml.first(), ml.size());
 }
 //复制列表中自位置p起的n项
