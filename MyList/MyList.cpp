@@ -101,11 +101,16 @@ int MyList<T>::deduplicate(){
     if(_size < 2) return 0;
     int oldSize = _size;
     ListNodePosi(T) p = header;
-    int count = 0;
+    static int r = 0;
     while(trailer != (p = p->succ)){
-        ListNodePosi(T) q = find(p->data, p, count);
-        q ? remove(q) : count++;
+        ListNodePosi(T) q = find(p->data, p, r);
+        // q ? remove(q) : ++r; ???
+        if(q)
+            remove(q);
+        else
+            r++;
     }
+    return oldSize - _size;
 }
 //无序区间查找,默认从后向前查找
 template <typename T>
@@ -139,7 +144,7 @@ T MyList<T>::selecMax()const{
 //有序去重
 template <typename T>
 int MyList<T>::uniquify(){
-    if(_szie < 2) return 0;
+    if(_size < 2) return 0;
     int oldSize = _size;
     ListNodePosi(T) p = header;
     ListNodePosi(T) q = header;
@@ -209,8 +214,8 @@ void MyList<T>::selectionSort(ListNodePosi(T) p, int n){
     for(auto i = 0; i != n; ++i)
         trail = trail->succ;
     while(1 < n){
-        ListNodePosi(T) max = selecMaxPosi(p, n);
-        if(trail->pred != max)
+        ListNodePosi(T) max = selecMaxPosi(head->succ, n);
+        // if(trail->pred != max)
             insertB(trail, remove(max));
         trail = trail->pred;
         n--;
@@ -221,9 +226,9 @@ template <typename T>
 ListNodePosi(T) MyList<T>::selecMaxPosi(ListNodePosi(T) p, int n){
     ListNodePosi(T) max = p;
     //自前向后
-    while(0 < n--){
-        if((p = p->succ)->data >= max->data)
-            max = p;
+    for(auto curr = p; 1 < n; n--){
+        if((curr = curr->succ)->data > max->data)
+            max = curr;
     }
     return max;
 }
@@ -256,8 +261,8 @@ template <typename T>
 void MyList<T>::reverse(){
     ListNodePosi(T) p = header;
     ListNodePosi(T) q = trailer;
-    for(auto i = 0; i != _size; i += 2)//从首末节点开始,由内而外捉对的
-        std::swap( (p = p->succ)->data, (q = q->pred)->data) ;//交换对称节点的数据项, 指针节点并不需要改变,指示交换T类型数据
+    for(auto i = 0; i < _size; i += 2)//从首末节点开始,由内而外捉对的
+        std::swap( (p = p->succ)->data, (q = q->pred)->data) ;//交换对称节点的数据项, 指针节点并不需要改变,只是交换T类型数据
 }
 //遍历,函数指针
 template <typename T>
@@ -288,4 +293,60 @@ std::ostream& operator<<(std::ostream & os, const ListNode<T> &p){
     const ListNodePosi(T) q = &p; //传地址,转换为指针
     os << q->data;  //取值并输出
     return os;
+}
+//重载==操作符
+template <typename T>
+bool operator==(const MyList<T> &lhs, const MyList<T> &rhs){
+    if(lhs.size() == rhs.size()){
+        ListNodePosi(T) p = lhs.first();
+        ListNodePosi(T) q = rhs.first();
+        for(auto i = 0; i != lhs.size(); ++i){
+            if(p->data != q->data)
+                return false;
+            p = p->succ;
+            q = q->succ;
+        }
+        return true;
+    }
+    return false;
+}
+//重载!=操作符
+template <typename T>
+bool operator!=(const MyList<T> &lhs, const MyList<T> &rhs){
+    return !(lhs == rhs);
+}
+//重载 <操作符
+template <typename T>
+bool operator <(const MyList<T> &lhs, const MyList<T> &rhs){
+    //定位左右列表前进的规模大小
+    auto lhsSize = 0, rhsSize = 0;
+    //定位左右列表首节点
+    ListNodePosi(T) p = lhs.first();
+    ListNodePosi(T) q = rhs.first(); 
+    for(; lhsSize != lhs.size() && rhsSize != rhs.size(); ++lhsSize, ++rhsSize){
+        //逐对元素比较
+        if(p->data < q->data) //如果一旦发现前者小于后者,便
+            return true; //返回true
+        if(p->data > q->data) //如果一旦发现前者大于后者,便
+            return false; //返回false
+        p = p->succ;
+        q = q->succ;
+    }
+    //如到这里,仍未退出,说明比较过的元素均相等.若前者规模小于后者并且右侧列表未到重点,则返回true. 反之,返回false. 或者元素都比较完毕,则说明两个列表元素均相等,前者未小于后者,返回false
+    return lhsSize == lhs.size() && rhsSize != rhs.size();
+}
+//重载 >=操作符
+template <typename T>
+bool operator>=(const MyList<T> &lhs, const MyList<T> &rhs){
+    return !(lhs < rhs);
+}
+//重载 >=操作符
+template <typename T>
+bool operator >(const MyList<T> &lhs, const MyList<T> &rhs){
+    return !(lhs == rhs) && !(lhs < rhs);
+}
+//重载 >=操作符
+template <typename T>
+bool operator<=(const MyList<T> &lhs, const MyList<T> &rhs){
+    return !(lhs > rhs);
 }

@@ -3,19 +3,17 @@
 //重载比较操作符
 template <typename T>
 bool operator< (const MyVector<T> &lhs, const MyVector<T> &rhs){
-    for(size_t i = 0; i != lhs.size() && i != rhs.size(); ++i){
+    size_t lhsSize = 0, rhsSize = 0;
+    for(; lhsSize != lhs.size() && rhsSize != rhs.size(); ++lhsSize, ++rhsSize){
         //对两个MyVector相同下标元素的比较
-        if(lhs._elem[i] < rhs._elem[i])
+        if(lhs._elem[lhsSize] < rhs._elem[rhsSize])
             return true;
         //若后者大于前者,直接返回假
-        if(lhs._elem[i] > rhs._elem[i])
+        if(lhs._elem[lhsSize] > rhs._elem[rhsSize])
             return false;
     }
-    //基于以上比较,元素均相等.仍存在两种可能.若前者规模小于后者,则
-    if(lhs.size() < rhs.size())
-        return true;  //为真
-    //否则后者规模小,返回假
-    return false;
+    //如到这里,仍未退出,说明比较过的元素均相等.若前者规模小于后者并且右侧向量未到重点,则返回true. 反之,返回false. 或者元素都比较完毕,则说明两个向量元素均相等,前者未小于后者,返回false
+    return lhsSize == lhs.size() && rhsSize != rhs.size();
 }
 // 不考虑规模、元素相等,但下标位置不同的情况,否则需将两者分别排序,再对比。
 template <typename T>
