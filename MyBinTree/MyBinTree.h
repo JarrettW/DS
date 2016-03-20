@@ -12,7 +12,7 @@ using BinNodePosi(T) = BinNode<T>*;
 //节点颜色,红黑树使用
 typedef enum{ RB_RED, RB_BLACK } RBColor;
 
-/************************************以宏的形式对基于BinNode的操作作一归纳整理*************************************/
+/************************************以宏的形式对基于BinNode的操作归纳整理*************************************/
 //是否为根节点
 #define IsRoot(x) (!(x.parent)) //根节点的父亲为NULL
 //是否为左孩子
@@ -38,6 +38,7 @@ typedef enum{ RB_RED, RB_BLACK } RBColor;
 //来自父亲的引用
 #define FromParentTo(x) ( IsRoot(x) ? _root : (IsLChild(x) ? (x).parent->lc : (x).parent->rc ))
 /***************************************************************************************************************/
+
 //二叉树节点模板类
 template <typename T>
 class BinNode{
@@ -68,23 +69,13 @@ public:
     BinNodePosi(T) insertAsLC(const T&);
     //将元素作为当前节点的右孩子插入
     BinNodePosi(T) insertAsRC(const T&);
-    //取当前节点的后继
+    //取当前节点的后继---取决于那种遍历,此处应用于中序遍历
     BinNodePosi(T) succ();
     
     //层次遍历,借助队列数据结构
     template <typename VST>
     void travLevel(VST &);
     
-    //先序遍历---迭代版
-    template <typename VST>
-    void travPre_I(BinNodePosi(T), VST &);
-    //中序遍历---迭代版
-    template <typename VST>
-    void travIn_I(BinNodePosi(T), VST &);
-    //后序遍历---迭代版
-    template <typename VST>
-    void travPost_I(BinNodePosi(T), VST &);
-      
     //先序遍历---递归版
     template <typename VST>
     void travPre_R(BinNodePosi(T), VST &);
@@ -94,6 +85,26 @@ public:
     //后序遍历---递归版
     template <typename VST>
     void travPost_R(BinNodePosi(T), VST &);
+    
+    //先序遍历---迭代版
+    template <typename VST>
+    void travPre_I(BinNodePosi(T), VST &);
+    //辅助方法
+    template <typename VST>
+    static void visitAlongLeftBranch(BinNodePosi(T), VST& , MyStack<BinNodePosi(T)> &); 
+    
+    //中序遍历---迭代版1,无需栈辅助,借助直接后继
+    template <typename VST>
+    void travIn_I(BinNodePosi(T), VST &);
+    //中序遍历---迭代版2
+    template <typename VST>
+    void travIn_I2(BinNodePosi(T), VST &);
+    
+    //后序遍历---迭代版
+    template <typename VST>
+    void travPost_I(BinNodePosi(T), VST &);
+    //辅助方法
+    static void gotoHLVFL(MyStack<BinNodePosi(T)> &);
     
     //先序遍历统一接口,随机选取递归版或迭代版
     template <typename VST>
@@ -113,50 +124,70 @@ public:
     //默认构造函数
     MyBinTree():_size(0), _root(NULL) {}
     //析构函数
-    
+    ~MyBinTree(){
+        if(_root)
+            remove(_root);
+    }
     //返回规模
-    
+    int size()const { return _size; }
     //判空
-    
+    bool empty()const { return !_size; }
     //返回根节点
-    
+    BinNodePosi(T) root()const { return _root; }
     //插入根节点
-        
+    BinNodePosi(T) insertRoot();
     //将元素e作为节点x的左孩子(原无)插入
-    
+    BinNodePosi(T) insertAsLC(BinNodePosi(T), const T &);
     //将元素e作为节点x的右孩子(原无)插入
-    
+    BinNodePosi(T) insertAsRC(BinNodePosi(T), const T &);
     //T作为左子树接入
-    
+    BinNodePosi(T) attachAsLC(BinNodePosi(T), BinTree<T>* &);
     //T作为右子树接入
-    
+    BinNodePosi(T) attachAsRC(BinNodePosi(T), BinTree<T>* &);
     //删除以位置x处节点为根的子树, 返回该子树原先的规模
-    
+    int remove(BinNodePosi(T)) ;
     //递归删除左右子树
-    
+    int removeAt(BinNodePosi(T));
     //将子树x从当前树中摘除,并将其转换为一棵独立子树
+    BinTree<T>* secede(BinNodePosi(T) );
     
     //函数对象, 遍历
     //先序遍历
-    
+    template <typename VST>
+    void travPre(VST &);
     //中序遍历
-    
+    template <typename VST>
+    void travIn(VST &);
     //后序遍历
-    
+    template <typename VST>
+    void travPost(VST &);
     //层次遍历
+    template <typename VST>
+    void travLevel(VST &);
     
     //比较操作符
-    
+    template <typename T>
+    friend bool operator==(const BinTree<T> &, const BinTree<T> &);
+    template <typename T>
+    friend bool operator!=(const BinTree<T> &, const BinTree<T> &);
+    template <typename T>
+    friend bool operator <(const BinTree<T> &, const BinTree<T> &);
+    template <typename T>
+    friend bool operator<=(const BinTree<T> &, const BinTree<T> &);
+    template <typename T>
+    friend bool operator >(const BinTree<T> &, const BinTree<T> &);
+    template <typename T>
+    friend bool operator>=(const BinTree<T> &, const BinTree<T> &);
 protected:
     //规模
     int _size;
     //根节点
     BinNodePosi(T) _root;
     //更新节点的高度
-    
+    int updateHeight(BinNodePosi(T) );
     //更新节点高度及其祖先的高度
-    
+    void updateHeightAbove(BinNodePosi(T) );
     //在两个元素中选取较大者
-    int max(const T, const t);
+    int max(const T, const T);
 };
 #endif
