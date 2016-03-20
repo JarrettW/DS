@@ -1,3 +1,5 @@
+#ifndef MYDEQUE_H_
+#define MYDEQUE_H_
 //双端队列,基于MyList实现.
 //在前端和后端插入、删除元素效率高
 #include "../MyList/MyList.cpp"
@@ -17,3 +19,4 @@ public:
  //引用队尾元素
  T& rear()const; 
 };
+#endif

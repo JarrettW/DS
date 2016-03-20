@@ -1,3 +1,5 @@
+#ifndef MYSTACK_H_
+#define MYSTACK_H_
 //基于MyList实现堆栈,利用MyList在尾元素操作效率高的优势,常数时间
 //堆栈是一个后进先出(LIFO)的数据结构
 #include "../MyList/MyList.cpp"
@@ -13,3 +15,4 @@ public:
     //取顶,返回最顶端元素,不删除
     T top()const;
 };
+#endif

@@ -1,5 +1,5 @@
-#ifndef CLIST_H_
-#define CLIST_H_
+#ifndef MYLIST_H_
+#define MYLIST_H_
 //列表节点模板类指针
 #define ListNodePosi(T) ListNode<T>*
 template <typename T>

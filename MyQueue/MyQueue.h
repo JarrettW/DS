@@ -1,3 +1,5 @@
+#ifndef MYQUEUE_H_
+#define MYQUEUE_H_
 //基于MyList实现队列数据结构
 //队列---先进先出(FIFO)
 #include "../MyList/MyList.cpp"
@@ -11,3 +13,4 @@ public:
   //引用队首元素
   T& front()const;
 };
+#endif
