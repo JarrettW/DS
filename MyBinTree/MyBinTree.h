@@ -86,21 +86,21 @@ public:
     template <typename VST>
     void travPost_R(BinNodePosi(T), VST &);
     
-    //先序遍历---迭代版
+    //先序遍历---迭代版 VLR
     template <typename VST>
     void travPre_I(BinNodePosi(T), VST &);
-    //辅助方法
+    //辅助方法---沿最左侧通路
     template <typename VST>
     static void visitAlongLeftBranch(BinNodePosi(T), VST& , MyStack<BinNodePosi(T)> &); 
     
-    //中序遍历---迭代版1,无需栈辅助,借助直接后继
+    //中序遍历---迭代版1,无需栈辅助,借助直接后继 LVR
     template <typename VST>
     void travIn_I(BinNodePosi(T), VST &);
     //中序遍历---迭代版2
     template <typename VST>
     void travIn_I2(BinNodePosi(T), VST &);
     
-    //后序遍历---迭代版
+    //后序遍历---迭代版 LRV
     template <typename VST>
     void travPost_I(BinNodePosi(T), VST &);
     //辅助方法

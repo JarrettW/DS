@@ -92,5 +92,48 @@ void BinNode<T>::travPost_R(BinNodePosi(T) x, VST &visit){
 template <typename T>
 template <typename VST>
 void BinNode<T>::travPre_I(BinNodePosi(T) x, VST &visit){
+    MyStack<BinNodePosi(T)> S; //辅助栈
+    while(true){
+        visitAlongLeftBranch(x, visit, S);
+        if(S.empty())
+            break;
+        x = S.pop();
+    }
+}
+//沿最左侧通路
+template <typename T>
+template <typename VST>
+static void BinNode<T>::visitAlongLeftBranch(BinNodePosi(T) x, VST &visit, MyStack<BinNodePosi(T)> &S){
+    while(x){
+        visit(x->data);  //访问当前节点
+        if(HasRChild(*x))
+            S.push(x->rc);  //若有右孩子,入栈暂存
+        x = x->lc;  //沿左分支深入一层
+    }
+}
+//中序遍历--迭代版1,无序栈辅助,借助中序遍历之直接后继 LVR
+template <typename T>
+template <typename VST>
+void BinNode<T>::travIn_I(BinNodePosi(T) x, VST &visit){
+    bool backtrack = false; //前一步是否刚从右子树回溯-省去栈,仅O(1)
+    while(true)
+        if( !backtrack && HasLChild(*x))
+            x = x->lc;
+        else{
+            visit(x->data);
+            if( HasRChild(*x) ){
+                x = x->rc;
+                backtrack = false;//关闭回溯标志,继续循环查看rc的左右情况
+            }else{
+                if( !(x = x->succ()))
+                    break;
+                backtrack = true;
+            }
+        }
+}
+//中序遍历---迭代版2
+template <typename T>
+template <typename VST>
+void BinNode<T>::travIn_I2(BinNodePosi(T) x, VST &visit){
     
 }
