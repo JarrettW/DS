@@ -131,9 +131,23 @@ void BinNode<T>::travIn_I(BinNodePosi(T) x, VST &visit){
             }
         }
 }
-//中序遍历---迭代版2
+//中序遍历---迭代版2 LVR
 template <typename T>
 template <typename VST>
 void BinNode<T>::travIn_I2(BinNodePosi(T) x, VST &visit){
-    
+    //辅助栈
+    MyStack<BinNodePosi(T)> S;
+    while(true){
+        //沿左侧通路,直至没有左侧分支节点
+        if(x){
+            S.push(x);
+            x = x->lc;
+        }else( !S.empty()){
+            //然后先访问最左侧的节点, 检查是否有右兄弟,继续循环检查访问
+            x = S.pop(); //第一次出栈的是最左侧叶节点
+            visit(x->data);  //访问之
+            x = x->rc;
+        }else
+            break;
+    }
 }

@@ -96,7 +96,7 @@ public:
     //中序遍历---迭代版1,无需栈辅助,借助直接后继 LVR
     template <typename VST>
     void travIn_I(BinNodePosi(T), VST &);
-    //中序遍历---迭代版2
+    //中序遍历---迭代版2 LVR
     template <typename VST>
     void travIn_I2(BinNodePosi(T), VST &);
     
