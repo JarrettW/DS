@@ -143,11 +143,29 @@ void BinNode<T>::travIn_I2(BinNodePosi(T) x, VST &visit){
             S.push(x);
             x = x->lc;
         }else( !S.empty()){
-            //然后先访问最左侧的节点, 检查是否有右兄弟,继续循环检查访问
             x = S.pop(); //第一次出栈的是最左侧叶节点
             visit(x->data);  //访问之
-            x = x->rc;
+            x = x->rc;  //然后先访问最左侧的节点, 检查是否有右兄弟,继续循环检查访问
         }else
             break;
     }
+}
+//后序遍历---迭代版 LRV
+template <typename T>
+template <typename VST>
+void BinNode<T>::travPost_I(BinNodePosi(T) x, VST &visit){
+    MyStack<BinNodePosi(T)> S;
+    if(x)
+        S.push(x);
+    while(!S.empty()){
+        if( S.top() != x->parent)//若栈顶非当前节点之父则必为其右兄
+            gotoHLVFL(S);
+        
+    }
+}
+//辅助方法---最高左侧可见叶节点HLVFL(highest leaf visiable from left)
+template <typename T>
+template <typename VST>
+void BinNode<T>::gotoHLVFL(MyStack<BinNodePosi(T)> & S){
+    
 }

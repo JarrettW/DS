@@ -103,7 +103,7 @@ public:
     //后序遍历---迭代版 LRV
     template <typename VST>
     void travPost_I(BinNodePosi(T), VST &);
-    //辅助方法
+    //辅助方法---最高左侧可见叶节点(highest left visiable from left)
     static void gotoHLVFL(MyStack<BinNodePosi(T)> &);
     
     //先序遍历统一接口,随机选取递归版或迭代版
