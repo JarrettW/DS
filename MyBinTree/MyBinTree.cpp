@@ -1,4 +1,5 @@
 #include "MyBinTree.h"
+/************************BinNode method***********************/
 //当前节点规模
 template <typename T>
 int BinNode<T>::size()const{
@@ -160,12 +161,188 @@ void BinNode<T>::travPost_I(BinNodePosi(T) x, VST &visit){
     while(!S.empty()){
         if( S.top() != x->parent)//若栈顶非当前节点之父则必为其右兄
             gotoHLVFL(S);
-        
+        x = S.pop();
+        visit(x->data);
     }
 }
 //辅助方法---最高左侧可见叶节点HLVFL(highest leaf visiable from left)
 template <typename T>
 template <typename VST>
 void BinNode<T>::gotoHLVFL(MyStack<BinNodePosi(T)> & S){
+    while(BinNodePosi(T) x = S.top()){
+        if(HasLChild(*x)){
+            if(HasRChild(*X))
+                S.push(x->rc);  //右孩子先入栈
+            S.push(x->lc);  //左孩子入栈
+        }else
+            S.push(x->rc);
+    }
+    S.pop();  //弹出栈顶的NULL
+}
+//先序遍历统一接口,随机选取递归版或迭代版
+template <typename T>
+template <typename VST>
+void BinNode<T>::travPre(VST &visit){
+    switch(rand() % 2){
+        case 0: travPre_I(this, visit); break;  //迭代版
+        case 1: travPre_R(this, visit); break;  //递归版 
+    }
+}
+//中序遍历统一接口,随机选取递归版或迭代版
+template <typename T>
+template <typename VST>
+void BinNode<T>::travIn(VST &visit){
+    switch(rand() % 3){
+        case 0: travIn_I(this, visit); break;  //迭代版
+        case 1: travIn_I2(this, visit); break; //迭代版
+        default: travIn_R(this, visit); break; //递归版
+    }
+}
+//后序遍历统一接口,随机选取递归版或迭代版
+template <typename T>
+template <typename VST>
+void BinNode<T>::travPost(VST &visit){
+    switch(rand() % 2){
+        case 0: travPost_I(this, visit); break; //迭代版
+        case 1: travPost_R(this, visit); break; //递归版
+    }
+}
+
+/*************************MyBinTree method********************/
+//插入根节点
+template <typename T>
+BinNodePosi(T) MyBinTree<T>::insertRoot(const T &e){
+    _size = 1;
+    return _root = new BinNode<T>(e);
+}
+//将元素e作为节点x的左孩子(原无)插入
+template <typename T>
+BinNodePosi(T) MyBinTree<T>::insertAsLC(BinNodePosi(T) x, const T &e){
+    _size++;
+    x->insertAsLC(e);
+    updateHeightAbove(x);  //更新x的树高
+    return x->lc;    
+}
+//将元素e作为节点x的右孩子(原无)插入
+template <typename T>
+BinNodePosi(T) MyBinTree<T>::insertAsRC(BinNodePosi(T) x, const T &e){
+    _size++;
+    x->insertAsRC(e);
+    updateHeightAbove(x);
+    return x->rc;
+}
+//将树T作为左子树接入, 返回接入的节点
+template <typename T>
+BinNodePosi(T) attachAsLC(BinNodePosi(T) x, BinTree<T>* &T){
+    x->lc = T->_root;  //将T的根节点当做左孩子与x链接
+    x->lc->parent = x;
+    _size += T->_size;  //更新规模
+    updateHeightAbove(x); //更新高度
+    T->_root = NULL;
+    T->_size = 0;
+    release(T);
+    T = NULL;
+    return x;
+}
+//将树T作为右子树接入, 返回接入的节点
+template <typename T>
+BinNodePosi(T) attachAsRC(BinNodePosi(T) x, BinTree<T>* &T){
+    x->rc = T->_root;
+    x->rc->parent = x;
+    _size += T->_size;
+    updateHeightAbove(x);
+    T->_root = NULL:
+    T->_size = 0;
+    release(T);
+    T = NULL;
+    return x;
+}
+//删除以位置x处节点为根的子树, 返回该子树原先的规模
+template <typename T>
+int MyBinTree<T>::remove(BinNodePosi(T) x){
+    FromParentTo(*x) = NULL;
+    updateHeightAbove(x->parent);
+    int n = 1 + removeAt(x);
+    _size -= n;
+    return n;
+}
+//递归地删除左右子树
+template <typename T>
+int MyBinTree<T>::removeAt(BinNodePosi(T) x){
+    if(!x)
+        return 0;
+    int n = 1 + removeAt(x->lc) + removeAt(x->rc);
+    release(x);
+    return n;
+}
+//将子树x从当前树中摘除,并将其转换为一棵独立子树
+template <typename T>
+BinTree<T>* MyBinTree<T>::secede(BinNodePosi(T) x){
+    BinTree<T> *T = new BinTree<T>;
+    FromParentTo(*x) = NULL;
+    updateHeightAbove(x->parent);
+    T->_root = x;
+    x->parent = NULL;
+    T->_size = x->size();
+    _size -= T->size();
+    return T;
+}
+//函数对象,遍历
+//先序遍历
+template <typename T>
+template <typename VST>
+void MyBinTree<T>::travPre(VST &visit){
+    if(_root)
+        _root->travPre(visit);
+}
+//中序遍历
+template <typename T>
+template <typename VST>
+void MyBinTree<T>::travIn(VST &visit){
+    if(_root)
+        _root->travIn(visit);
+}
+//后序遍历
+template <typename T>
+template <typename VST>
+void MyBinTree<T>::travPost(VST &visit){
+    if(_root)
+        _root->travPost(visit);
+}
+//层次遍历
+template <typename T>
+template <typename VST>
+void MyBinTree<T>::travLevel(VST &visit){
+    if(_root)
+        _root->travLevel(visit);
+}
+//比较操作符
+template <typename T>
+bool operator==(const BinTree<T> &lhs, const BinTree<T> &rhs){
+    return lhs._root && rhs._root && lhs._root->data ==  rhs._root->data;
+}
+template <typename T>
+bool operator!=(const BinTree<T> &lhs, const BinTree<T> &rhs){
+    return !(lhs == rhs);
+}
+template <typename T>
+bool operator <(const BinTree<T> &lhs, const BinTree<T> &rhs){
+    return lhs._root && rhs._root && lhs._root->data < rhs._root->data;
+}
+template <typename T>
+bool operator<=(const BinTree<T> &lhs, const BinTree<T> &rhs){
+    return !(lhs > rhs);
+}
+template <typename T>
+bool operator >(const BinTree<T> &lhs, const BinTree<T> &rhs){
+    return !(lhs < rhs) && !(lhs == rhs);
+}
+template <typename T>
+bool operator>=(const BinTree<T> &lhs, const BinTree<T> &rhs){
+    return !(lhs < rhs);
+}
+//更新节点的高度
+template <typename T>
+int MyBinTree<T>::updateHeight(BinNodePosi(T) x){
     
 }

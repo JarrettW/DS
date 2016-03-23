@@ -111,7 +111,7 @@ public:
     void travPre(VST &visit);
     //中序遍历统一接口,随机选取递归版或迭代版
     template <typename VST>
-    void travPre(VST &visit);
+    void travIn(VST &visit);
     //后序遍历统一接口,随机选取递归版或迭代版
     template <typename VST>
     void travPost(VST &visit);
@@ -135,14 +135,14 @@ public:
     //返回根节点
     BinNodePosi(T) root()const { return _root; }
     //插入根节点
-    BinNodePosi(T) insertRoot();
+    BinNodePosi(T) insertRoot(const T &);
     //将元素e作为节点x的左孩子(原无)插入
     BinNodePosi(T) insertAsLC(BinNodePosi(T), const T &);
     //将元素e作为节点x的右孩子(原无)插入
     BinNodePosi(T) insertAsRC(BinNodePosi(T), const T &);
-    //T作为左子树接入
+    //将树T作为左子树接入
     BinNodePosi(T) attachAsLC(BinNodePosi(T), BinTree<T>* &);
-    //T作为右子树接入
+    //将树T作为右子树接入
     BinNodePosi(T) attachAsRC(BinNodePosi(T), BinTree<T>* &);
     //删除以位置x处节点为根的子树, 返回该子树原先的规模
     int remove(BinNodePosi(T)) ;
@@ -189,5 +189,14 @@ protected:
     void updateHeightAbove(BinNodePosi(T) );
     //在两个元素中选取较大者
     int max(const T, const T);
+    //释放一棵树
+    void release(BinTree<T>* &S){
+        remove(S->root());
+    }
+    //释放一个节点
+    void release(BinNodePosi(T) x){
+        FromParentTo(*x) = NULL; //切断来自父亲的指针
+        updateHeightAbove(x->parent);
+    }
 };
 #endif
