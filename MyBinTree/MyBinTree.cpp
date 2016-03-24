@@ -167,8 +167,7 @@ void BinNode<T>::travPost_I(BinNodePosi(T) x, VST &visit){
 }
 //辅助方法---最高左侧可见叶节点HLVFL(highest leaf visiable from left)
 template <typename T>
-template <typename VST>
-void BinNode<T>::gotoHLVFL(MyStack<BinNodePosi(T)> & S){
+static void BinNode<T>::gotoHLVFL(MyStack<BinNodePosi(T)> & S){
     while(BinNodePosi(T) x = S.top()){
         if(HasLChild(*x)){
             if(HasRChild(*X))
@@ -233,7 +232,7 @@ BinNodePosi(T) MyBinTree<T>::insertAsRC(BinNodePosi(T) x, const T &e){
 }
 //将树T作为左子树接入, 返回接入的节点
 template <typename T>
-BinNodePosi(T) attachAsLC(BinNodePosi(T) x, BinTree<T>* &T){
+BinNodePosi(T) attachAsLC(BinNodePosi(T) x, MyBinTree<T>* &T){
     x->lc = T->_root;  //将T的根节点当做左孩子与x链接
     x->lc->parent = x;
     _size += T->_size;  //更新规模
@@ -246,7 +245,7 @@ BinNodePosi(T) attachAsLC(BinNodePosi(T) x, BinTree<T>* &T){
 }
 //将树T作为右子树接入, 返回接入的节点
 template <typename T>
-BinNodePosi(T) attachAsRC(BinNodePosi(T) x, BinTree<T>* &T){
+BinNodePosi(T) attachAsRC(BinNodePosi(T) x, MyBinTree<T>* &T){
     x->rc = T->_root;
     x->rc->parent = x;
     _size += T->_size;
@@ -277,8 +276,8 @@ int MyBinTree<T>::removeAt(BinNodePosi(T) x){
 }
 //将子树x从当前树中摘除,并将其转换为一棵独立子树
 template <typename T>
-BinTree<T>* MyBinTree<T>::secede(BinNodePosi(T) x){
-    BinTree<T> *T = new BinTree<T>;
+MyBinTree<T>* MyBinTree<T>::secede(BinNodePosi(T) x){
+    MyBinTree<T> *T = new MyBinTree<T>;
     FromParentTo(*x) = NULL;
     updateHeightAbove(x->parent);
     T->_root = x;
@@ -318,31 +317,78 @@ void MyBinTree<T>::travLevel(VST &visit){
 }
 //比较操作符
 template <typename T>
-bool operator==(const BinTree<T> &lhs, const BinTree<T> &rhs){
+bool operator==(const MyBinTree<T> &lhs, const MyBinTree<T> &rhs){
     return lhs._root && rhs._root && lhs._root->data ==  rhs._root->data;
 }
 template <typename T>
-bool operator!=(const BinTree<T> &lhs, const BinTree<T> &rhs){
+bool operator!=(const MyBinTree<T> &lhs, const MyBinTree<T> &rhs){
     return !(lhs == rhs);
 }
 template <typename T>
-bool operator <(const BinTree<T> &lhs, const BinTree<T> &rhs){
+bool operator <(const MyBinTree<T> &lhs, const MyBinTree<T> &rhs){
     return lhs._root && rhs._root && lhs._root->data < rhs._root->data;
 }
 template <typename T>
-bool operator<=(const BinTree<T> &lhs, const BinTree<T> &rhs){
+bool operator<=(const MyBinTree<T> &lhs, const MyBinTree<T> &rhs){
     return !(lhs > rhs);
 }
 template <typename T>
-bool operator >(const BinTree<T> &lhs, const BinTree<T> &rhs){
+bool operator >(const MyBinTree<T> &lhs, const MyBinTree<T> &rhs){
     return !(lhs < rhs) && !(lhs == rhs);
 }
 template <typename T>
-bool operator>=(const BinTree<T> &lhs, const BinTree<T> &rhs){
+bool operator>=(const MyBinTree<T> &lhs, const MyBinTree<T> &rhs){
     return !(lhs < rhs);
 }
 //更新节点的高度
 template <typename T>
 int MyBinTree<T>::updateHeight(BinNodePosi(T) x){
-    
+    return x->height = 1 + max(stature(x->lc), stature(x->rc));
+}
+//更新节点以及祖先的高度
+template <typename T>
+void MyBinTree<T>::updateHeightAbove(BinNodePosi(T) x){
+    while(x){
+        updateHeight(x);
+        x = x->parent;
+    }
+}
+//在两个元素中选取较大者
+template <typename T>
+int MyBinTree<T>::max(const T a, const T b){
+    a > b ? a : b;
+}
+
+// 1.入栈
+template <typename T>
+void MyStack<T>::push(const T &e){
+    insertAsLast(e);
+}
+// 2.出栈
+template <typename T>
+T MyStack<T>::pop(){
+    return remove(last());
+}
+// 3.取顶
+template <typename T>
+T MyStack<T>::top()const {
+    return lastElem();
+}
+
+//入队,插入队尾
+template <typename T>
+void MyQueue<T>::enqueue(const T &e){
+    insertAsLast(e);
+}
+
+//出队
+template <typename T>
+T MyQueue<T>::dequeue(){
+    return remove(first());;
+}
+
+//引用队首元素
+template <typename T>
+T& MyQueue<T>::front()const{
+    return first()->data;
 }

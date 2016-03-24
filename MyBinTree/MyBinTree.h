@@ -1,12 +1,35 @@
-#ifndef MYBINTREE_H_
-#define MYBINTREE_H_
+#ifndef __MYBINTREE_H__
+#define __MYBINTREE_H__
 //二叉树的数据结构
+
+#include "../MyList/MyList.cpp"
+
 //借助MyStack和MyQueue实现各遍历方法
-#include "../MyStack/MyStack.cpp"
-#include "../MyQueue/MyQueue.cpp"
+template <typename T>
+class MyStack: public MyList<T>{
+public:
+    //默认构造函数
+    MyStack(){}
+    //入栈,仅支持在尾元素插入
+    void push(const T &e);
+    //出栈,仅支持删除尾元素
+    T pop();
+    //取顶,返回最顶端元素,不删除
+    T top()const;
+};
+template <typename T>
+class MyQueue: public MyList<T>{
+public:
+  //入队,插入队尾
+  void enqueue(const T&e);
+  //出队
+  T dequeue();
+  //引用队首元素
+  T& front()const;
+};
 
 //二叉树节点位置
-using BinNodePosi(T) = BinNode<T>*;
+#define BinNodePosi(T) BinNode<T>*
 //如果p节点存在返回其高度,否则这里规定空树为-1
 #define stature(p) ((p) ? (p->height) : -1)
 //节点颜色,红黑树使用
@@ -119,7 +142,7 @@ public:
 
 //二叉树模板类
 template <typename T>
-class MyBinTree:{
+class MyBinTree{
 public:
     //默认构造函数
     MyBinTree():_size(0), _root(NULL) {}
@@ -141,15 +164,15 @@ public:
     //将元素e作为节点x的右孩子(原无)插入
     BinNodePosi(T) insertAsRC(BinNodePosi(T), const T &);
     //将树T作为左子树接入
-    BinNodePosi(T) attachAsLC(BinNodePosi(T), BinTree<T>* &);
+    BinNodePosi(T) attachAsLC(BinNodePosi(T), MyBinTree<T>* &);
     //将树T作为右子树接入
-    BinNodePosi(T) attachAsRC(BinNodePosi(T), BinTree<T>* &);
+    BinNodePosi(T) attachAsRC(BinNodePosi(T), MyBinTree<T>* &);
     //删除以位置x处节点为根的子树, 返回该子树原先的规模
     int remove(BinNodePosi(T)) ;
     //递归删除左右子树
     int removeAt(BinNodePosi(T));
     //将子树x从当前树中摘除,并将其转换为一棵独立子树
-    BinTree<T>* secede(BinNodePosi(T) );
+    MyBinTree<T>* secede(BinNodePosi(T) );
     
     //函数对象, 遍历
     //先序遍历
@@ -167,17 +190,17 @@ public:
     
     //比较操作符
     template <typename T>
-    friend bool operator==(const BinTree<T> &, const BinTree<T> &);
+    friend bool operator==(const MyBinTree<T> &, const MyBinTree<T> &);
     template <typename T>
-    friend bool operator!=(const BinTree<T> &, const BinTree<T> &);
+    friend bool operator!=(const MyBinTree<T> &, const MyBinTree<T> &);
     template <typename T>
-    friend bool operator <(const BinTree<T> &, const BinTree<T> &);
+    friend bool operator <(const MyBinTree<T> &, const MyBinTree<T> &);
     template <typename T>
-    friend bool operator<=(const BinTree<T> &, const BinTree<T> &);
+    friend bool operator<=(const MyBinTree<T> &, const MyBinTree<T> &);
     template <typename T>
-    friend bool operator >(const BinTree<T> &, const BinTree<T> &);
+    friend bool operator >(const MyBinTree<T> &, const MyBinTree<T> &);
     template <typename T>
-    friend bool operator>=(const BinTree<T> &, const BinTree<T> &);
+    friend bool operator>=(const MyBinTree<T> &, const MyBinTree<T> &);
 protected:
     //规模
     int _size;
@@ -190,7 +213,7 @@ protected:
     //在两个元素中选取较大者
     int max(const T, const T);
     //释放一棵树
-    void release(BinTree<T>* &S){
+    void release(MyBinTree<T>* &S){
         remove(S->root());
     }
     //释放一个节点
