@@ -8,7 +8,7 @@ struct ListNode{
 	T data;
 	//前驱
 	ListNodePosi(T) pred;
-	//后继
+	//后继 
 	ListNodePosi(T) succ;
 	//默认构造函数
 	ListNode(){}

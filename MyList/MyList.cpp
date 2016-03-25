@@ -8,7 +8,7 @@ int MyList<T>::clear(){
         remove(header->succ);
     }
     return oldSize;
-}
+} 
 //初始化节点函数
 template <typename T>
 void MyList<T>::init(){

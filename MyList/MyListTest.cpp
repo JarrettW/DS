@@ -8,7 +8,7 @@ template <typename T>
 inline void trav(T &e){
     std::cout << e << " ";
 }
-//函数对象
+//函数对象 
 template <typename T>
 struct Trav{
    void operator()(T &e){
