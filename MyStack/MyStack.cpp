@@ -3,7 +3,7 @@
 template <typename T>
 void MyStack<T>::push(const T &e){
     insertAsLast(e);
-}
+} 
 // 2.出栈
 template <typename T>
 T MyStack<T>::pop(){

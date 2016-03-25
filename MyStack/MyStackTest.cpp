@@ -10,7 +10,7 @@ int main(){
     S1.push('b');
     std::cout << S1.top() << std::endl;
     //堆顶出栈
-    S1.pop();
+    S1.pop(); 
     
     std::cout << S1.top();
     return 0;
