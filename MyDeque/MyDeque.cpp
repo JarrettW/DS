@@ -8,7 +8,7 @@ void MyDeque<T>::insertFront(const T&e){
 template <typename T>
 void MyDeque<T>::insertRear(const T &e){
     insertAsLast(e);
-}
+} 
 //删除队首元素
 template <typename T>
 T MyDeque<T>::removeFront(){

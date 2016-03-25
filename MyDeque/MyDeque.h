@@ -18,5 +18,5 @@ public:
  T& front()const;
  //引用队尾元素
  T& rear()const; 
-};
+}; 
 #endif

@@ -13,7 +13,7 @@ int main(){
     D1.insertRear(3);
     //队尾插入4
     D1.insertRear(4);
-    std::cout << "D1:  ";
+    std::cout << "D1:  "; 
     //显示D1内的元素
     D1.show(D1.first());
     std::cout << "D1 size: " << D1.size() << std::endl;
