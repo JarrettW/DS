@@ -8,7 +8,7 @@
 template <typename T>
 class MyStack: public MyList<T>{
 public:
-    //默认构造函数
+    //默认构造函数 
     MyStack(){}
     //入栈,仅支持在尾元素插入
     void push(const T &e);

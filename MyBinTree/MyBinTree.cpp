@@ -6,7 +6,7 @@ int BinNode<T>::size(){
     if(!this)  //当前节点为NULL,则规模为0
         return 0;
     static int count = 0;  //计数器
-    MyQueue<BinNodePosi(T)> Q;  //辅助队列
+    MyQueue<BinNodePosi(T)> Q;  //辅助队列 
     Q.enqueue(this); //当前节点入队
     while( !Q.empty() ){  //队列不为空时,循环出队入队并计数
         BinNodePosi(T) x = Q.dequeue();  //出队,并赋值临时变量x

@@ -13,7 +13,7 @@ public:
 
 int main(){
 	MyBinTree<string> *BT = new MyBinTree<string>;
-	//插入根节点
+	//插入根节点 
 	BT->insertRoot("One");
 	std::cout << "_root: ";
 	std::cout << BT->root()->data << std::endl;
