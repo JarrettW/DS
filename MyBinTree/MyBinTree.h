@@ -37,7 +37,7 @@ typedef enum{ RB_RED, RB_BLACK } RBColor;
 
 /************************************以宏的形式对基于BinNode的操作归纳整理*************************************/
 //是否为根节点
-#define IsRoot(x) (!(x.parent)) //根节点的父亲为NULL
+#define IsRoot(x) (!((x).parent)) //根节点的父亲为NULL
 //是否为左孩子
 #define IsLChild(x) ( !IsRoot(x) && (& (x) == (x).parent->lc ))
 //是否为右孩子
@@ -87,7 +87,7 @@ public:
     BinNode(T e, BinNodePosi(T) p = NULL, BinNodePosi(T) lc = NULL, BinNodePosi(T) rc = NULL, int h = 0, int l = 1, RBColor c = RB_RED)
                     :data(e), parent(p), lc(lc), rc(rc), height(h), npl(l), color(c) {}
     //以当前节点为根的子树规模,即当前节点后代总数
-    int size()const;
+    int size();
     //将元素作为当前节点的左孩子插入
     BinNodePosi(T) insertAsLC(const T&);
     //将元素作为当前节点的右孩子插入

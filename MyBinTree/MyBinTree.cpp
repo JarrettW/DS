@@ -2,7 +2,7 @@
 /************************BinNode method***********************/
 //当前节点规模
 template <typename T>
-int BinNode<T>::size()const{
+int BinNode<T>::size(){
     if(!this)  //当前节点为NULL,则规模为0
         return 0;
     static int count = 0;  //计数器
