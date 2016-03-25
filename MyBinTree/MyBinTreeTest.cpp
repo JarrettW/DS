@@ -14,42 +14,41 @@ public:
 int main(){
 	MyBinTree<string> *BT = new MyBinTree<string>;
 	//插入根节点
-	BT->insertRoot("ZhuXi");
+	BT->insertRoot("One");
 	std::cout << "_root: ";
 	std::cout << BT->root()->data << std::endl;
 	std::cout << "_size: " << BT->size() << std::endl;
 	std::cout << "height: " << BT->updateHeight(BT->root()) << std::endl;
 	std::cout << std::endl;
 	//插入左孩子
-	BT->insertAsLC(BT->root(), "FuzhuXi");
-	std::cout << BT->root()->lc->data << std::endl;
+	BT->insertAsLC(BT->root(), "Two");
+	std::cout << "left child: " << BT->root()->lc->data << std::endl;
 	std::cout << "_size: " << BT->size() << std::endl;
 	std::cout << "height: " << BT->updateHeight(BT->root()) << std::endl;
 	std::cout << std::endl;
 	//插入右孩子
-	BT->insertAsRC(BT->root(), "Zongli");
-	std::cout << BT->root()->rc->data << std::endl;
+	BT->insertAsRC(BT->root(), "Six");
+	std::cout << "right child: " << BT->root()->rc->data << std::endl;
 	std::cout << "_size: " << BT->size() << std::endl;
 	std::cout << "height: " << BT->updateHeight(BT->root()) << std::endl;
 	std::cout << std::endl;
 	
 	//创建一棵树T1
 	MyBinTree<string> *T1 = new MyBinTree<string>;
-	T1->insertRoot("ShiZhang");
-	T1->insertAsLC(T1->root(), "QuZhang");
-	T1->insertAsRC(T1->root(), "XianZhang");
+	T1->insertRoot("Three");
+	T1->insertAsLC(T1->root(), "Four");
+	T1->insertAsRC(T1->root(), "Five");
 	//创建一棵树T2
 	MyBinTree<string> *T2 = new MyBinTree<string>;
-	T2->insertRoot("ZhenZhang");
-	T2->insertAsLC(T2->root(), "XiangZhang");
-	T2->insertAsRC(T2->root(), "CunZhang");
+	T2->insertRoot("Seven");
+	T2->insertAsLC(T2->root(), "Eight");
+	T2->insertAsRC(T2->root(), "Nine");
 	
 	//分别为BT的左右孩子节点下接入子树
 	BT->attachAsLC(BT->root()->lc, T1);
 	BT->attachAsRC(BT->root()->rc, T2);
 	
-	std::cout << "height: " << BT->updateHeight(BT->root()) << std::endl;
-	std::cout << std::endl;
+	std::cout << "attachAsLC and attachAsRC, height: " << BT->updateHeight(BT->root()) << std::endl;
 	
 	//层次遍历
 	std::cout << "\ntravLevel: \n";
@@ -88,12 +87,9 @@ int main(){
 	MyBinTree<string>* ST = new MyBinTree<string>;
 	ST = BT->secede(BT->root()->rc);
 	std::cout << "secede subtree, the subtree is: ";
-	//后序遍历
-	std::cout << "\ntravPost: \n";
-	BT->travPost(visit<string>());
+	ST->travPost(visit<string>());
 	
 	std::cout << "\nheight: " << BT->updateHeight(BT->root()) << std::endl;
-	std::cout << std::endl;
-	
+
 	return 0;
 }

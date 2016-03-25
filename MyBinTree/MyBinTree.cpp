@@ -12,9 +12,9 @@ int BinNode<T>::size(){
         BinNodePosi(T) x = Q.dequeue();  //出队,并赋值临时变量x
         if(x)
             count++;  //如果x不为空,计数
-        if(HasLChild(*x))
+        if(HasLChild(x))
             Q.enqueue(x->lc);  //若存在左孩子,将其入队
-        if(HasRChild(*x))
+        if(HasRChild(x))
             Q.enqueue(x->rc);  //多存在右孩子,也将其入队
     }
     return count - 1;  //返回此即为规模
@@ -27,18 +27,18 @@ BinNodePosi(T) BinNode<T>::insertAsLC(const T &e){
 //将元素作为当前节点的右孩子插入
 template <typename T>
 BinNodePosi(T) BinNode<T>::insertAsRC(const T &e){
-    return lc = new BinNode(e, this);
+    return rc = new BinNode(e, this);
 }
 //中序遍历(LVR),取当前节点的后继
 template <typename T>
 BinNodePosi(T) BinNode<T>::succ(){
     BinNodePosi(T) x = this;
     if(rc){ //若有右孩子,则直接后继在右子树中
-        s = rc;
-        while(HasLChild(*x))
+        x = rc;
+        while(HasLChild(x))
             x = x->lc;  //即右子树中最靠左(最小)的节点
     }else{//否则,succ应该是"将当前节点包含于其左子树中的最低祖先"
-        while(IsRChild(*x))
+        while(IsRChild(x))
             x = x->parent;//逆向地沿右向分支,不断朝左上方移动
         x = x->parent;//最后再朝左上方移动一步,即抵达直接后继(若存在)
     }
@@ -53,9 +53,9 @@ void BinNode<T>::travLevel(VST &visit){
     while( !Q.empty() ){  //只要队列不为空
         BinNodePosi(T) x = Q.dequeue();  //出队
         visit(x->data);  //访问刚出队元素
-        if(HasLChild(*x))
+        if(HasLChild(x))
             Q.enqueue(x->lc);  //若有,左孩子入队
-        if(HasRChild(*x))
+        if(HasRChild(x))
             Q.enqueue(x->rc);  //若有,右孩子入队
     }
 }
@@ -107,7 +107,7 @@ template <typename VST>
 static void BinNode<T>::visitAlongLeftBranch(BinNodePosi(T) x, VST &visit, MyStack<BinNodePosi(T)> &S){
     while(x){
         visit(x->data);  //访问当前节点
-        if(HasRChild(*x))
+        if(HasRChild(x))
             S.push(x->rc);  //若有右孩子,入栈暂存
         x = x->lc;  //沿左分支深入一层
     }
@@ -118,11 +118,11 @@ template <typename VST>
 void BinNode<T>::travIn_I(BinNodePosi(T) x, VST &visit){
     bool backtrack = false; //前一步是否刚从右子树回溯-省去栈,仅O(1)
     while(true)
-        if( !backtrack && HasLChild(*x))
+        if( !backtrack && HasLChild(x))
             x = x->lc;
         else{
             visit(x->data);
-            if( HasRChild(*x) ){
+            if( HasRChild(x) ){
                 x = x->rc;
                 backtrack = false;//关闭回溯标志,继续循环查看rc的左右情况
             }else{
@@ -143,7 +143,7 @@ void BinNode<T>::travIn_I2(BinNodePosi(T) x, VST &visit){
         if(x){
             S.push(x);
             x = x->lc;
-        }else( !S.empty()){
+        }else if( !S.empty()){
             x = S.pop(); //第一次出栈的是最左侧叶节点
             visit(x->data);  //访问之
             x = x->rc;  //然后先访问最左侧的节点, 检查是否有右兄弟,继续循环检查访问
@@ -167,10 +167,10 @@ void BinNode<T>::travPost_I(BinNodePosi(T) x, VST &visit){
 }
 //辅助方法---最高左侧可见叶节点HLVFL(highest leaf visiable from left)
 template <typename T>
-static void BinNode<T>::gotoHLVFL(MyStack<BinNodePosi(T)> & S){
+void BinNode<T>::gotoHLVFL(MyStack<BinNodePosi(T)> & S){
     while(BinNodePosi(T) x = S.top()){
-        if(HasLChild(*x)){
-            if(HasRChild(*X))
+        if(HasLChild(x)){
+            if(HasRChild(x))
                 S.push(x->rc);  //右孩子先入栈
             S.push(x->lc);  //左孩子入栈
         }else
@@ -232,34 +232,33 @@ BinNodePosi(T) MyBinTree<T>::insertAsRC(BinNodePosi(T) x, const T &e){
 }
 //将树T作为左子树接入, 返回接入的节点
 template <typename T>
-BinNodePosi(T) attachAsLC(BinNodePosi(T) x, MyBinTree<T>* &T){
+BinNodePosi(T) MyBinTree<T>::attachAsLC(BinNodePosi(T) x, MyBinTree<T>* &T){
     x->lc = T->_root;  //将T的根节点当做左孩子与x链接
     x->lc->parent = x;
     _size += T->_size;  //更新规模
     updateHeightAbove(x); //更新高度
     T->_root = NULL;
     T->_size = 0;
-    release(T);
     T = NULL;
     return x;
 }
 //将树T作为右子树接入, 返回接入的节点
 template <typename T>
-BinNodePosi(T) attachAsRC(BinNodePosi(T) x, MyBinTree<T>* &T){
+BinNodePosi(T) MyBinTree<T>::attachAsRC(BinNodePosi(T) x, MyBinTree<T>* &T){
     x->rc = T->_root;
     x->rc->parent = x;
     _size += T->_size;
     updateHeightAbove(x);
-    T->_root = NULL:
+    T->_root = NULL;
     T->_size = 0;
-    release(T);
+    
     T = NULL;
     return x;
 }
 //删除以位置x处节点为根的子树, 返回该子树原先的规模
 template <typename T>
 int MyBinTree<T>::remove(BinNodePosi(T) x){
-    FromParentTo(*x) = NULL;
+    FromParentTo(x) = NULL;
     updateHeightAbove(x->parent);
     int n = 1 + removeAt(x);
     _size -= n;
@@ -271,14 +270,13 @@ int MyBinTree<T>::removeAt(BinNodePosi(T) x){
     if(!x)
         return 0;
     int n = 1 + removeAt(x->lc) + removeAt(x->rc);
-    release(x);
     return n;
 }
 //将子树x从当前树中摘除,并将其转换为一棵独立子树
 template <typename T>
 MyBinTree<T>* MyBinTree<T>::secede(BinNodePosi(T) x){
     MyBinTree<T> *S = new MyBinTree<T>;
-    FromParentTo(*x) = NULL;
+    FromParentTo(x) = NULL;
     updateHeightAbove(x->parent);
     S->_root = x;
     x->parent = NULL;
@@ -356,7 +354,7 @@ void MyBinTree<T>::updateHeightAbove(BinNodePosi(T) x){
 //在两个元素中选取较大者
 template <typename T>
 int MyBinTree<T>::max(const int a, const int b){
-    a > b ? a : b;
+    return a > b ? a : b;
 }
 
 // 1.入栈

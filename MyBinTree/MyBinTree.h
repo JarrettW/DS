@@ -37,17 +37,17 @@ typedef enum{ RB_RED, RB_BLACK } RBColor;
 
 /************************************以宏的形式对基于BinNode的操作归纳整理*************************************/
 //是否为根节点
-#define IsRoot(x) (!((x).parent)) //根节点的父亲为NULL
+#define IsRoot(x) (!(x->parent)) //根节点的父亲为NULL
 //是否为左孩子
-#define IsLChild(x) ( !IsRoot(x) && (& (x) == (x).parent->lc ))
+#define IsLChild(x) ( !IsRoot(x) && ( x == x->parent->lc ))
 //是否为右孩子
-#define IsRChild(x) ( !IsRoot(x) && (& (x) == (x).parent->rc ))
+#define IsRChild(x) ( !IsRoot(x) && ( x == x->parent->rc ))
 //是否有父节点
 #define HasParent(x) ( !IsRoot(x) ) //不为根节点,就有父节点
 //是否有左孩子
-#define HasLChild(x) ( (x).lc )
+#define HasLChild(x) ( x->lc )
 //是否有右孩子
-#define HasRChild(x) ( (x.)rc )
+#define HasRChild(x) ( x->rc )
 //至少有一个孩子
 #define HasOneChild(x) ( HasLChild(x) || HasRChild(x) )
 //同时拥有两个孩子
@@ -59,7 +59,7 @@ typedef enum{ RB_RED, RB_BLACK } RBColor;
 //叔叔关系的节点和指针
 #define uncle(p) ( IsLChild( *( (p)->parent ) ) ? (p)->parent->parent->rc : (p)->parent->parent->lc )
 //来自父亲的引用
-#define FromParentTo(x) ( IsRoot(x) ? _root : (IsLChild(x) ? (x).parent->lc : (x).parent->rc ))
+#define FromParentTo(x) ( IsRoot(x) ? _root : (IsLChild(x) ? x->parent->lc : x->parent->rc ))
 /***************************************************************************************************************/
 
 //二叉树节点模板类
@@ -212,14 +212,5 @@ protected:
     BinNodePosi(T) _root;
     //在两个元素中选取较大者
     int max(const int, const int);
-    //释放一棵树
-    void release(MyBinTree<T>* &S){
-        remove(S->root());
-    }
-    //释放一个节点
-    void release(BinNodePosi(T) x){
-        FromParentTo(*x) = NULL; //切断来自父亲的指针
-        updateHeightAbove(x->parent);
-    }
 };
 #endif
