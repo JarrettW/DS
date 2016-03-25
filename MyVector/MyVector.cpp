@@ -11,7 +11,7 @@ bool operator< (const MyVector<T> &lhs, const MyVector<T> &rhs){
         //若后者大于前者,直接返回假
         if(lhs._elem[lhsSize] > rhs._elem[rhsSize])
             return false;
-    }
+    } 
     //如到这里,仍未退出,说明比较过的元素均相等.若前者规模小于后者并且右侧向量未到重点,则返回true. 反之,返回false. 或者元素都比较完毕,则说明两个向量元素均相等,前者未小于后者,返回false
     return lhsSize == lhs.size() && rhsSize != rhs.size();
 }

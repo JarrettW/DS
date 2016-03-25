@@ -22,7 +22,7 @@ public:
     //default constructor
     MyVector():_size(0), _capacity(DEFAULT_CAPACITY), _elem(NULL){}
     //constructor,将向量初始化为n个0
-    MyVector(int n);
+    MyVector(int n); 
     //constructor,将向量初始化为n个e
     MyVector(int n, const T e);
     //initialization_list,列表初始化

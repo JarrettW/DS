@@ -14,7 +14,7 @@ struct Visit{
       std::cout << e << " ";
   }
 };
-
+ 
 int main(){
     MyVector<int> DefaultConstructor; //默认构造函数
     const int a = 10;
