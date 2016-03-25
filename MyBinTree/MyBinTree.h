@@ -159,6 +159,10 @@ public:
     BinNodePosi(T) root()const { return _root; }
     //插入根节点
     BinNodePosi(T) insertRoot(const T &);
+    //更新节点的高度
+    int updateHeight(BinNodePosi(T) );
+    //更新节点高度及其祖先的高度
+    void updateHeightAbove(BinNodePosi(T) );
     //将元素e作为节点x的左孩子(原无)插入
     BinNodePosi(T) insertAsLC(BinNodePosi(T), const T &);
     //将元素e作为节点x的右孩子(原无)插入
@@ -206,12 +210,8 @@ protected:
     int _size;
     //根节点
     BinNodePosi(T) _root;
-    //更新节点的高度
-    int updateHeight(BinNodePosi(T) );
-    //更新节点高度及其祖先的高度
-    void updateHeightAbove(BinNodePosi(T) );
     //在两个元素中选取较大者
-    int max(const T, const T);
+    int max(const int, const int);
     //释放一棵树
     void release(MyBinTree<T>* &S){
         remove(S->root());

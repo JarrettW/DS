@@ -277,14 +277,14 @@ int MyBinTree<T>::removeAt(BinNodePosi(T) x){
 //将子树x从当前树中摘除,并将其转换为一棵独立子树
 template <typename T>
 MyBinTree<T>* MyBinTree<T>::secede(BinNodePosi(T) x){
-    MyBinTree<T> *T = new MyBinTree<T>;
+    MyBinTree<T> *S = new MyBinTree<T>;
     FromParentTo(*x) = NULL;
     updateHeightAbove(x->parent);
-    T->_root = x;
+    S->_root = x;
     x->parent = NULL;
-    T->_size = x->size();
-    _size -= T->size();
-    return T;
+    S->_size = x->size();
+    _size -= S->size();
+    return S;
 }
 //函数对象,遍历
 //先序遍历
@@ -355,7 +355,7 @@ void MyBinTree<T>::updateHeightAbove(BinNodePosi(T) x){
 }
 //在两个元素中选取较大者
 template <typename T>
-int MyBinTree<T>::max(const T a, const T b){
+int MyBinTree<T>::max(const int a, const int b){
     a > b ? a : b;
 }
 

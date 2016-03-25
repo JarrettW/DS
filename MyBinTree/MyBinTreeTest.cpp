@@ -12,7 +12,7 @@ public:
 };
 
 int main(){
-	BinTree<string> *BT = new BinTree<string>;
+	MyBinTree<string> *BT = new MyBinTree<string>;
 	//插入根节点
 	BT->insertRoot("ZhuXi");
 	std::cout << "_root: ";
@@ -34,12 +34,12 @@ int main(){
 	std::cout << std::endl;
 	
 	//创建一棵树T1
-	BinTree<string> *T1 = new BinTree<string>;
+	MyBinTree<string> *T1 = new MyBinTree<string>;
 	T1->insertRoot("ShiZhang");
 	T1->insertAsLC(T1->root(), "QuZhang");
 	T1->insertAsRC(T1->root(), "XianZhang");
 	//创建一棵树T2
-	BinTree<string> *T2 = new BinTree<string>;
+	MyBinTree<string> *T2 = new MyBinTree<string>;
 	T2->insertRoot("ZhenZhang");
 	T2->insertAsLC(T2->root(), "XiangZhang");
 	T2->insertAsRC(T2->root(), "CunZhang");
@@ -85,7 +85,7 @@ int main(){
     std::cout << "\nheight: " << BT->updateHeight(BT->root()) << std::endl;
 	std::cout << std::endl;
 	//将子树x从当前树中摘除,并将其转换为一棵独立子树
-	BinTree<string>* ST = new BinTree<string>;
+	MyBinTree<string>* ST = new MyBinTree<string>;
 	ST = BT->secede(BT->root()->rc);
 	std::cout << "secede subtree, the subtree is: ";
 	//后序遍历
