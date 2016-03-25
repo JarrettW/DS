@@ -10,7 +10,7 @@ public:
   void enqueue(const T&e);
   //出队
   T dequeue();
-  //引用队首元素
+  //引用队首元素 
   T& front()const;
 };
 #endif

@@ -9,6 +9,6 @@ int main(){
     std::cout << "Q1 top: " << Q1.front() << std::endl;
     std::cout << "Q1 pop: " << Q1.dequeue() << std::endl;
     std::cout << "Q1 size: " << Q1.size() << std::endl;
-    
+     
     return 0;
 }

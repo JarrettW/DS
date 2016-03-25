@@ -10,7 +10,7 @@ template <typename T>
 T MyQueue<T>::dequeue(){
     return remove(first());;
 }
-
+ 
 //引用队首元素
 template <typename T>
 T& MyQueue<T>::front()const{
