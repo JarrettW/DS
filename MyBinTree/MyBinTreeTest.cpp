@@ -75,7 +75,7 @@ int main(){
 	std::cout << "BT != T2: " << (BT != T2) << std::endl;
 	
 	//删除以位置x处节点为根的子树,返回该子树原先的规模
-	std::cout << "\nremove BinNodePosi(T) x, size of x is: "
+	std::cout << "\nRemove BinNodePosi(T) x, size of x is: "
 			<< BT->remove(BT->root()->lc->lc) << std::endl;
 	//后序遍历
 	std::cout << "\ntravPost: \n";
@@ -89,7 +89,9 @@ int main(){
 	std::cout << "secede subtree, the subtree is: ";
 	ST->travPost(visit<string>());
 	
-	std::cout << "\nheight: " << BT->updateHeight(BT->root()) << std::endl;
+	//后序遍历
+	std::cout << "\ntravPost: \n";
+	BT->travPost(visit<string>());
 
 	return 0;
 }
