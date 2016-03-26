@@ -130,7 +130,7 @@ MyVector<T>& MyVector<T>::operator=(const MyVector<T> &mv){
     clear();
     _size = mv.size();
     _capacity = mv.capacity();
-    copyForm(mv._elem, 0, mv.size());
+    copyFrom(mv._elem, 0, mv.size());
     return *this;
 }
 //move constructor
@@ -146,7 +146,7 @@ MyVector<T>& MyVector<T>::operator=(MyVector<T> &&mv)noexcept{
     clear();
     _size = mv.size();
     _capacity = mv.capacity();
-    copyForm(std::move(mv._elem), 0, std::move(mv.size()));
+    copyFrom(std::move(mv._elem), 0, std::move(mv.size()));
 }
 template <typename T>
 //将元素e插入秩r,原后继元素依次后移
