@@ -21,13 +21,8 @@ class MyVector{
 public:
     //default constructor
     MyVector():_size(0), _capacity(DEFAULT_CAPACITY), _elem(NULL){}
-    //容量为c、规模为s、所有元素初始为v
-    MyVector(int c = DEFAULT_CAPACITY, int s = 0, T v = 0){
-        _elem = new T[_capacity = c];
-        for(_size = 0; _size < s; _elem[_size++] = v);
-    }
     //constructor,将向量初始化为n个0
-    MyVector(int n); 
+    MyVector(int n);
     //constructor,将向量初始化为n个e
     MyVector(int n, const T e);
     //initialization_list,列表初始化
