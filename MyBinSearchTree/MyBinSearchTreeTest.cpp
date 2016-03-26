@@ -11,7 +11,6 @@ public:
 };
 
 int main(){
-    std::cout << "\ntime: " << clock() << std::endl;
 	MyBinSearchTree<int> *BT = new MyBinSearchTree<int>;
 	//插入根节点
 	BT->insertRoot(36);
@@ -48,13 +47,12 @@ int main(){
 	
 	std::cout << "height: " << BT->updateHeight(BT->root()) <<
     "\nsize: " << BT->size() << std::endl;
-	std::cout << std::endl;
 	//中序遍历
 	std::cout << "\ntravIn: \n";
 	BT->travIn(visit<int>());
     std::cout << "\n-------------------------------------------------------------------------------\n";
 	
-    std::cout << "\nsearch: \n";
+    std::cout << "insert: \n";
     BT->insert(62);
     std::cout << "height: " << BT->updateHeight(BT->root()) <<  "\nsize: " << BT->size() <<std::endl;
      
@@ -64,6 +62,6 @@ int main(){
     //中序遍历
 	std::cout << "\ntravIn: \n";
 	BT->travIn(visit<int>());
-	std::cout << "\nfinish time: " << clock() << std::endl;
+	std::cout << "\nTime: " << clock();
 	return 0;
 }
