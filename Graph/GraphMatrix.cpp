@@ -43,7 +43,7 @@ void Graph<Tv, Te>::DFS(int v, int &clock){   //深度优先搜索DFS算法(单�
     dTime(v) = ++clock; status(v) = DISCOVERED;  //发现当前顶点v
     for( int u = firstNbr(v); -1 < u; u = nextNbr(v, u) ){  //枚举v的所有邻居u
         switch(status(u)){
-            case UNDISCOVERED://u尚未发现,以为着支撑树可在此拓展
+            case UNDISCOVERED://u尚未发现,意味着支撑树可在此拓展
                 type(v, u) = TREE; parent(u) = v; DFS(u, clock); break;
             case DISCOVERED:  //u已被发现但未访问完毕, 应属被后代指向的祖先
                 type(v, u) = BACKWARD; break;
@@ -159,9 +159,9 @@ void Graph<Tv, Te>::PFS(int s, PU prioUpdater){  //优先级搜索(单个连通�
     }
 }//通过定义具体的优先级更新策略prioUpdater,即可实现不同的算法功能
 
-//
-/*template <typename Tv, typename Te>
-struct PrimPU{  //针对Prim算法的顶点优先级更新器
+//针对Prim算法的顶点优先级更新器
+template <typename Tv, typename Te>
+struct PrimPU{ 
   virtual void operator() ( GraphMatrix<Tv, Te>* g, int uk, int v){
       if( UNDISCOVERED == g->status(v))  //对于uk每一尚未被发现的邻接顶点v
         if(g->priority(v) > g->weight(uk, v)) {  //按Prim策略做松弛
@@ -171,8 +171,9 @@ struct PrimPU{  //针对Prim算法的顶点优先级更新器
   }  
 };
 
+//针对Dijkstra算法的顶点优先级更新器
 template <typename Tv, typename Te>
-struct DijkstraPU{  //针对Dijkstra算法的顶点优先级更新器
+struct DijkstraPU{  
     virtual void operator()( GraphMatrix<Tv, Te>* g, int uk, int v){
         if(UNDISCOVERED == g->status(v) ) //对于uk每一尚未被发现的邻接顶点v,按Dijkstra策略
             if(g->priority(v) > g->priority(uk) + g->weight(uk, v)){  //做松弛
@@ -180,18 +181,7 @@ struct DijkstraPU{  //针对Dijkstra算法的顶点优先级更新器
                 g->parent(v) = uk; //并同时更新父节点
             }
     }
-};*/
-
-//test
-template <typename Tv, typename Te>
-void Graph<Tv, Te>::prim(int x){
-    std::cout << "prim\n";
-}
-
-template <typename Tv, typename Te>
-void Graph<Tv, Te>::dijkstra(int a){
-    std::cout << "dijkstra\n";
-}
+};
 
 // 1.入栈
 template <typename T>

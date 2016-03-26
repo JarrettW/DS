@@ -32,7 +32,7 @@ private:
 	MyVector<Vertex<Tv>> V; //顶点集(向量)
 	MyVector<MyVector<Edge<Te>*>> E; //边集(邻接矩阵)
 public:
-	GraphMatrix() { n = 10; e = 0; }  //构造,顶点数,边数初始化为0
+	GraphMatrix() { n = e = 0; }  //构造,顶点数,边数初始化为0
 	~GraphMatrix(){  //析构
 		for(int j = 0; j < n; j++)//所有动态创建的
 			for(int k = 0; k < n; k++)//边记录
@@ -40,7 +40,7 @@ public:
 	}
     //顶点的基本操作:查询第i个顶点(0 <= i < n)
     void showV(){
-        std::cout << n << "/" << e;
+        std::cout << "Vertex: " << n << "\nEdge: " << e;
     }
 	virtual Tv& vertex(int i) { return V[i].data; }  //当前顶点数据
 	virtual int inDegree(int i) { return V[i].inDegree; } //入度
@@ -57,7 +57,7 @@ public:
 	virtual int& priority(int i) { return V[i].priority; }  //在遍历树中的优先级数
     //顶点的动态操作
 	virtual int insert(const Tv& vertex){  //插入顶点,返回编号
-		for(int j = 0; j < n; j++)
+        for(int j = 0; j < n; j++)
 			E[j].insert(NULL);  //各顶点预留一条潜在的关连边
 		n++;
 		E.insert( MyVector< Edge<Te>* > (n, n, (Edge<Te>* ) NULL ) ); //创建新顶点对应的边向量
