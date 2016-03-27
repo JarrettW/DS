@@ -17,7 +17,7 @@ protected:
     //命中节点的父亲
     BinNodePosi(T) _hot;
     //按照"3+4"结构,联接3个节点及四棵子树
-    BinNodePosi(T) connect34(BinNodePosi(T), BinNodePosi(T), BinNodePosi(T), BinNodePosi(T), BinNodePosi(T), BinNodePosi(T) );
+    BinNodePosi(T) connect34(BinNodePosi(T), BinNodePosi(T), BinNodePosi(T), BinNodePosi(T), BinNodePosi(T), BinNodePosi(T), BinNodePosi(T) );
     //对x及其父亲、祖父做统一旋转调整
     BinNodePosi(T) rotateAt(BinNodePosi(T) x);
     //查找辅助方法
