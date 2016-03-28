@@ -36,6 +36,36 @@ public:
 template <typename T>
 class BTree{
 public:
-    
+    //构造函数, 初始化为最低的阶
+    BTree(int order = 3):_order(order), _size(0) {
+        _root = new BNode<T>();
+    }
+    //规模
+    int size()const { return _size; }
+    //阶次
+    int order()const { return _order; }
+    //判空
+    bool empty()const { return !_root; }
+    //树根
+    BNodePosi(T)& root(){ return _root; }
+    //查找
+    BNodePosi(T) search(const T &e);
+    //插入
+    bool insert(const T &e);
+    //删除
+    bool remove(const T &e);
+protected:
+    //根节点
+    BNodePosi(T) _root;
+    //最后访问的非空节点的位置
+    BNodePosi(T) _hot;
+    //规模
+    int _size;
+    //阶次
+    int _order;
+    //因插入而上溢之后的分裂处理
+    void solveOverflow(BNodePosi(T) v);
+    //因删除而下溢之后的合并处理
+    void solveUnderflow(BNodePosi(T) v);
 };
 #endif
