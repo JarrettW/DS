@@ -55,6 +55,8 @@ public:
     }
     //insert, 默认作为末元素插入,返回元素插入位置
     int insert(const T &e);
+    //insert, 将元素e插入秩r,原后继元素依次后移
+    int insert(int r, const T &e);
     //find, 无序查找(基于区间查找),返回其秩,失败返回-1
     int find(const T &e)const{
         return find(0, _size, e);
@@ -71,6 +73,8 @@ public:
         remove(r, r + 1);
         return oldElem;
     }
+    //删除秩在区间[lo,hi)之内的元素,返回删除元素的个数
+    int remove(int lo, int hi);
     //删除所有元素clear
 	void clear(){
         remove(0, _size);
@@ -110,10 +114,6 @@ protected:
     int search(int lo, int hi, const T &e)const;
     //二分查找
     int binSearch(int *A, int lo, int hi, const T &e)const;
-    //insert, 将元素e插入秩r,原后继元素依次后移
-    int insert(int r, const T &e);
-    //删除秩在区间[lo,hi)之内的元素,返回删除元素的个数
-    int remove(int lo, int hi);
     //max.选取最大元素,返回其秩
     int max(int lo, int hi);    
     //partition, 轴点构造算法
