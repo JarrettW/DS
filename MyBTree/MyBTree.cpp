@@ -71,7 +71,7 @@ void MyBTree<T>::solveOverflow(BNodePosi(T) v){
     //p中指向u的指针的秩
     int s = 1 + p->key.search(v->key[0]);
     //轴点关键码上升
-    p->key.insert(s, v->key.remove(s));
+    p->key.insert(s, v->key.remove(r));
     //新节点u与父亲节点p互联
     p->child.insert(s + 1, u); u->parent = p;
     //上升一层,如有必要则继续分裂
@@ -86,7 +86,7 @@ bool MyBTree<T>::remove(const T &e){
     if(!v)
         return false;
     //至此,确定目标关键码在节点v中的秩
-    int  r = v->key.search(e);
+    int r = v->key.search(e);
     //若v非叶子,则e的后继必属于某叶节点. 2.与后继交换
     if(v->child[0]){
         BNodePosi(T) u = v->child[r+1];//在右子树中一直向左
@@ -139,7 +139,7 @@ void MyBTree<T>::solveUnderflow(BNodePosi(T) v){
     }
     //至此,左兄弟要么为空, 要么太"瘦"
     //情况2: 向右兄弟借关键码
-    if( p->chlid.size() - 1 > r){
+    if( p->child.size() - 1 > r){
         BNodePosi(T) rs = p->child[r+1]; //右兄弟必存在
         if( (_order + 1) / 2 < rs->child.size()){//若该兄弟足够"胖"
             //p先借出一个关键码给v(作为最大关键码)
@@ -159,12 +159,12 @@ void MyBTree<T>::solveUnderflow(BNodePosi(T) v){
         //左兄弟必存在
         BNodePosi(T) ls = p->child[r-1];
         //p的第r-1个关键码转入ls, v不再是p的第r个孩子
-        ls>key.insert(ls->key.size(), p->key.remove(r-1));
+        ls->key.insert(ls->key.size(), p->key.remove(r-1));
         p->child.remove(r);
-        ls>child.insert(ls->child.size(), v->child.remove(0));
+        ls->child.insert(ls->child.size(), v->child.remove(0));
         //v的最左侧孩子过继给ls做最右侧孩子
         if(ls->child[ls->child.size() - 1])
-            ls->child[ls->child.size - 1]->parent = ls;
+            ls->child[ls->child.size() - 1]->parent = ls;
         while( !v->key.empty() ){ //V剩余的关键码和孩子,依次传入ls
             ls->key.insert( ls->key.size(), v->key.remove(0));
             ls->child.insert( ls->child.size(), v->child.remove(0));
