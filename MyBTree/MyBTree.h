@@ -22,7 +22,7 @@ public:
         child.insert(0, NULL);  //初始化下标0的位置为孩子NULL
     }
     BNode(T e, BNodePosi(T) lc = NULL, BNodePosi(T) rc = NULL){
-        parent = NULL:
+        parent = NULL;
         key.insert(0, e);  //只有一个关键码
         child.insert(0, lc); child.insert(1, rc); //以及两个孩子
         if(lc)
@@ -34,10 +34,10 @@ public:
 
 //B-树
 template <typename T>
-class BTree{
+class MyBTree{
 public:
     //构造函数, 初始化为最低的阶
-    BTree(int order = 3):_order(order), _size(0) {
+    MyBTree(int order = 3):_order(order), _size(0) {
         _root = new BNode<T>();
     }
     //规模

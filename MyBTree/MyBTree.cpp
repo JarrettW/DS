@@ -25,7 +25,7 @@ bool MyBTree<T>::insert(const T &e){
     BNodePosi(T) v = search(e);
     //若存在,插入失败,返回false
     if(v)
-        return false;
+        return false;  
     //若不存在,在_hot关键码中搜索(必定失败)e,找到合适的插入位置r
     int r = _hot->key.search(e);
     //插入关键码
@@ -50,16 +50,16 @@ void MyBTree<T>::solveOverflow(BNodePosi(T) v){
     //创建一个新节点, 注意新节点已有一个空孩子
     BNodePosi(T) u = new BNode<T>();
     //v右侧_order-s-1个孩子及关键码分裂为右侧节点u
-    for(int j = 0; j < _order-s-1; j++){
+    for(int j = 0; j < _order - r - 1; j++){
         u->child.insert(j, v->child.remove(r + 1));
         u->key.insert(j, v->key.remove(r + 1));
     }
     //移动v最靠右的孩子
-    u->child[_order-r-1] = v->child.remove(r+1);
+    u->child[_order - r - 1] = v->child.remove(r + 1);
     //若u的孩子们非空, 则---令他们的父节点统一指向u
     if(u->child[0])
-        for(int j = 0; j < _order-s; j++)
-            u->child[i]->parent = u;
+        for(int j = 0; j < _order - r; j++)
+            u->child[j]->parent = u;
     //v当前的父节点p
     BNodePosi(T) p = v->parent;
     //若p空则创建之
@@ -69,11 +69,11 @@ void MyBTree<T>::solveOverflow(BNodePosi(T) v){
         v->parent = p;
     }
     //p中指向u的指针的秩
-    int r = 1 + p->key.search(v->key[0]);
+    int s = 1 + p->key.search(v->key[0]);
     //轴点关键码上升
-    p->key.insert(r, v->key.remove(s));
+    p->key.insert(s, v->key.remove(s));
     //新节点u与父亲节点p互联
-    p->child.insert(r + 1, u); u->parent = p;
+    p->child.insert(s + 1, u); u->parent = p;
     //上升一层,如有必要则继续分裂
     solveOverflow(p);
 }
@@ -173,9 +173,24 @@ void MyBTree<T>::solveUnderflow(BNodePosi(T) v){
         }
         v = NULL;
     }else{//与右兄弟合并
-    
-        //v的最左侧孩子过继给ls做最右侧孩子
-    
+        //右兄弟必存在
+        BNodePosi(T) rs = p->child[r + 1];
+        //p的第r个关键码转入rs, v不再是p的第r个孩子
+        rs->key.insert(0, p->key.remove(r)); p->child.remove(r);
+        rs->child.insert(0, v->child.remove(v->child.size() -1 ));
+        //v的最左侧孩子过继给rs做最右侧孩子
+        if(rs->child[0])
+            rs->child[0]->parent = rs;
+        //v剩余的关键码和孩子,依次转入rs
+        while(!v->key.empty()){
+            rs->key.insert(0, v->key.remove( v->key.size() - 1 ));
+            rs->child.insert(0, v->child.remove( v->child.size() - 1));
+            if(rs->child[0])
+                rs->child[0]->parent = rs;
+        }
+        v = NULL;
     }
     //上升一层, 如有必要则继续分裂.
+    solveUnderflow(p);
+    return;
 }
