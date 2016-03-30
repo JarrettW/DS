@@ -129,7 +129,7 @@ protected:
     void merge(int lo, int mi, int hi);
     //quick sort,快排
     void quickSort(int lo, int hi);
-private:
+protected:
   T *_elem;
   unsigned _size;
   unsigned _capacity;
