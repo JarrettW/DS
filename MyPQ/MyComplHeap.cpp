@@ -29,6 +29,7 @@ T MyComplHeap<T>::delMax(){
 //Floyd建堆算法, 给定一组词条, 组织为一个堆
 template <typename T>
 void MyComplHeap<T>::heapify(int n){
+    //初始化为末节点的父亲(即最后一个内部节点)
     for(int i = LastInternal(n); InHeap(n, i); i--)
         percolateDown(n, i);
 }
@@ -63,7 +64,7 @@ int MyComplHeap<T>::percolateDown(int n, int i){
     //i及其孩子中的父亲
     int j;
     while( i != ( j = ProperParent(_elem, n, i))){
-        swap(_elem[i], _elem[j]);
+        swap(_elem[i], _elem[j]);//与(最多)三者中最大者交换
         i = j;
     }
     return i;
