@@ -6,7 +6,7 @@ template <typename T>
 MyQlistNodePosi(T) MyQuadlistNode<T>::insertAsSuccAbove(const T &e, MyQlistNodePosi(T) b = NULL){
     MyQlistNodePosi(T) p = new MyQuadlistNode(e, this, succ, NULL, b);
     //设置水平链接
-    succ->pred = p; succ = x;
+    succ->pred = p; succ = p;
     //设置垂直逆向链接
     if(b)
         b->above = p;
@@ -40,12 +40,14 @@ int MyQuadlist<T>::clear(){
 }
 
 //将*e作为p的后继、b的上邻插入
+template <typename T>
 MyQlistNodePosi(T) MyQuadlist<T>::insertAfterAbove(const T &e, MyQlistNodePosi(T) p, MyQlistNodePosi(T) b = NULL){
     _size++;
     return p->insertAsSuccAbove(e, b);
 }
 
 //删除(合法)位置p处的节点, 返回被删除节点的数值
+template <typename T>
 T MyQuadlist<T>::remove(MyQlistNodePosi(T) p){
     p->pred->succ = p->succ;
     p->succ->pred = p->pred;

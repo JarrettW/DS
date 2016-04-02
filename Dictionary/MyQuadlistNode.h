@@ -19,7 +19,8 @@ struct MyQuadlistNode{
    MyQlistNodePosi(T) below;
    //构造
    MyQuadlistNode(T e = T(), MyQlistNodePosi(T) p = NULL, MyQlistNodePosi(T) s = NULL,
-                             MyQlistNodePosi(T) a = NULL, MyQlistNodePosi(T) b = NULL):entry(e), pred(p), succ(s), above(a), below(b){}
+                             MyQlistNodePosi(T) a = NULL, MyQlistNodePosi(T) b = NULL):
+                             entry(e), pred(p), succ(s), above(a), below(b) {}
    //插入新节点(后继,上邻), 以当前节点为前驱, 以节点b为下邻
    MyQlistNodePosi(T) insertAsSuccAbove(const T &e, MyQlistNodePosi(T) b = NULL);
 } ;

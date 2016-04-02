@@ -8,9 +8,9 @@ private:
     //规模
     int _size;
     //头哨兵
-    MyQuadlistNode(T) header;
+    MyQlistNodePosi(T) header;
     //尾哨兵
-    MyQuadlistNode(T) trailer;
+    MyQlistNodePosi(T) trailer;
 protected:
     //MyQuadlist创建时初始化
     void init();
@@ -31,11 +31,11 @@ public:
     //判空
     bool empty()const { return _size <= 0; }
     //首节点位置
-    MyQuadlistNode(T) first()const { return header->succ; }
+    MyQlistNodePosi(T) first()const { return header->succ; }
     //末节点位置
-    MyQuadlistNode(T) last()const { return trailer->pred; }
+    MyQlistNodePosi(T) last()const { return trailer->pred; }
     //判断位置p是否对外合法
-    bool valid(MyQuadlistNode(T) p){
+    bool valid(MyQlistNodePosi(T) p){
         return p && ( trailer != p) && ( header != p);
     }
 //可写访问接口

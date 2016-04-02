@@ -8,7 +8,7 @@ struct MyDictionary{
   //插入词条(禁止雷同词条出现时失败)
   virtual bool put(K, V) = 0;
   //读取词条
-  virtual T* get(K k);
+  virtual V* get(K k) = 0;
   //删除词条
   virtual bool remove(K k) = 0;
 };
